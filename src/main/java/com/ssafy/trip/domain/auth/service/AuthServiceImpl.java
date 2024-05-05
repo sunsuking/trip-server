@@ -1,20 +1,17 @@
 package com.ssafy.trip.domain.auth.service;
 
-import com.ssafy.trip.core.cache.CacheKey;
 import com.ssafy.trip.core.exception.CustomException;
 import com.ssafy.trip.core.exception.ErrorCode;
-import com.ssafy.trip.core.properties.AuthProperties;
 import com.ssafy.trip.domain.auth.entity.TokenValidate;
+import com.ssafy.trip.domain.auth.repository.AuthCacheRepository;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.Objects;
 
 import static com.ssafy.trip.domain.auth.dto.AuthData.*;
@@ -29,8 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthProperties authProperties;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final AuthCacheRepository authCacheRepository;
 
     /**
      * 로컬 사용자 로그인
@@ -77,9 +73,9 @@ public class AuthServiceImpl implements AuthService {
         String code = generateCode();
         try {
             emailService.sendSignUpEmail(signUp.getEmail(), signUp.getNickname(), code);
-            String key = CacheKey.emailConfirmCodeKey(signUp.getEmail());
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(key))) throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
-            redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(5));
+            if (authCacheRepository.existsConfirmKey(signUp.getEmail()))
+                throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+            authCacheRepository.saveConfirm(signUp.getEmail(), code);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
@@ -96,9 +92,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void signOut(User user, String refreshToken) {
         TokenValidate tokenValidate = TokenValidate.of(user.getUsername(), refreshToken);
-        String key = CacheKey.authenticationKey(user.getUsername());
-        redisTemplate.opsForHash().putAll(key, tokenValidate.toMap());
-        redisTemplate.expire(key, Duration.ofMillis(authProperties.getRefreshTokenExpiry()));
+        authCacheRepository.saveTokenValidate(user.getUsername(), tokenValidate.toMap());
     }
 
     /**
@@ -109,18 +103,17 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean confirm(Confirm confirm) {
-        String key;
-        switch (confirm.getType()) {
-            case "sign-up" -> key = CacheKey.emailConfirmCodeKey(confirm.getEmail());
-            case "find-password" -> key = CacheKey.findPasswordCodeKey(confirm.getEmail());
+        String value = switch (confirm.getType()) {
+            case "sign-up" -> authCacheRepository.confirm(confirm.getEmail());
+            case "find-password" -> authCacheRepository.findPassword(confirm.getEmail());
             default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
-        }
+        };
 
-        if (confirm.getCode().equals(redisTemplate.opsForValue().get(key))) {
+        if (confirm.getCode().equals(value)) {
             userMapper.findByEmail(confirm.getEmail()).ifPresent(User::confirmEmail);
-            redisTemplate.delete(key);
             return true;
         }
+
         return false;
     }
 
@@ -133,10 +126,9 @@ public class AuthServiceImpl implements AuthService {
     public void findPassword(String email) {
         String code = generateCode();
         try {
-            String key = CacheKey.findPasswordCodeKey(email);
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(key))) throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
-            redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(5));
-            emailService.sendFindPasswordEmail(email, code);
+            if (authCacheRepository.existsFindPasswordKey(email))
+                throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+            authCacheRepository.saveFindPassword(email, code);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
@@ -149,18 +141,16 @@ public class AuthServiceImpl implements AuthService {
             try {
                 switch (type) {
                     case "sign-up" -> {
-                        String key = CacheKey.emailConfirmCodeKey(email);
-                        if (Boolean.TRUE.equals(redisTemplate.hasKey(key)))
+                        if (authCacheRepository.existsFindPasswordKey(email))
                             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
                         emailService.sendSignUpEmail(email, "", code);
-                        redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(5));
+                        authCacheRepository.saveConfirm(email, code);
                     }
                     case "find-password" -> {
-                        String key = CacheKey.findPasswordCodeKey(email);
-                        if (Boolean.TRUE.equals(redisTemplate.hasKey(key)))
+                        if (authCacheRepository.existsFindPasswordKey(email))
                             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
-                        redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(5));
                         emailService.sendFindPasswordEmail(email, code);
+                        authCacheRepository.saveFindPassword(email, code);
                     }
                     default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
                 }
@@ -183,9 +173,7 @@ public class AuthServiceImpl implements AuthService {
             String username = jwtTokenService.getUsername(refreshToken);
             if (username == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
-
-            String key = CacheKey.authenticationKey(username);
-            Object redisRefreshToken = redisTemplate.opsForHash().get(key, "refreshToken");
+            Object redisRefreshToken = authCacheRepository.findRefreshKeyInTokenValidate(username);
             if (Objects.equals(redisRefreshToken, refreshToken)) {
                 throw new CustomException(ErrorCode.USER_ALREADY_SIGN_OUT);
             }
@@ -201,6 +189,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String generateCode() {
-        return String.valueOf((int) (Math.random() * 900000) + 100000);
+        return String.valueOf((int) (Math.random() * 899999) + 100000);
     }
 }

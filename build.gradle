@@ -70,6 +70,7 @@ dependencies {
 
     // Spring Boot 문서화
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation "com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}"
 
     // Spring Boot 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
