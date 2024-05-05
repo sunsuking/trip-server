@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 환경변수 설정 파일 ###
+**/application-oauth.properties
+**/application-secret.properties
+.env
