@@ -15,5 +15,5 @@ public interface UserMapper {
 
     void save(User user);
 
-    void resetPassword(String username, String password);
+    void update(User user);
 }

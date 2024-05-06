@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class JwtTokenService {
     private final AuthProperties authProperties;
-    private final UserPrincipalService userPrincipalService;
     private Key key;
 
     @PostConstruct

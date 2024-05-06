@@ -61,7 +61,6 @@ public class AuthCacheRepository {
 
     public void deleteConfirm(String email) {
         String key = CacheKey.emailConfirmCodeKey(email);
-        System.out.println(key);
         redisTemplate.delete(key);
     }
 

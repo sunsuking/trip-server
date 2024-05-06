@@ -22,9 +22,16 @@
         VALUES (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{providerType}, #{roleType});
     </insert>
 
-    <update id="resetPassword">
+    <update id="update">
         UPDATE users
-        SET password = #{password}
-        WHERE username = #{username};
+        SET username          = #{username},
+            email             = #{email},
+            password          = #{password},
+            nickname          = #{nickname},
+            profile_image     = #{profileImage},
+            provider_type     = #{providerType},
+            role_type         = #{roleType},
+            is_email_verified = #{isEmailVerified}
+        WHERE id = #{id};
     </update>
 </mapper>

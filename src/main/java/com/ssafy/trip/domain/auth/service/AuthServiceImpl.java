@@ -6,7 +6,6 @@ import com.ssafy.trip.domain.auth.entity.TokenValidate;
 import com.ssafy.trip.domain.auth.repository.AuthCacheRepository;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,16 +69,10 @@ public class AuthServiceImpl implements AuthService {
         // 비밀번호 암호화 추가
         signUp.setPassword(passwordEncoder.encode(signUp.getPassword()));
 
-        // 이메일 인증 코드 생성
-        String code = generateCode();
-        try {
-            emailService.sendSignUpEmail(signUp.getEmail(), signUp.getNickname(), code);
-            if (authCacheRepository.existsConfirmKey(signUp.getEmail()))
-                throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
-            authCacheRepository.saveConfirm(signUp.getEmail(), code);
-        } catch (MessagingException e) {
-            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
-        }
+        // 이메일 인증 코드 전송
+        if (authCacheRepository.existsConfirmKey(signUp.getEmail()))
+            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
+        emailService.sendSignUpEmail(signUp.getEmail(), signUp.getNickname());
         userMapper.save(User.createLocalUser(signUp));
     }
 
@@ -108,7 +101,10 @@ public class AuthServiceImpl implements AuthService {
             case "sign-up" -> {
                 String code = authCacheRepository.confirm(confirm.getEmail());
                 if (confirm.getCode().equals(code)) {
-                    userMapper.findByEmail(confirm.getEmail()).ifPresent(User::confirmEmail);
+                    userMapper.findByEmail(confirm.getEmail()).ifPresent(user -> {
+                        user.confirmEmail();
+                        userMapper.update(user);
+                    });
                     authCacheRepository.deleteConfirm(confirm.getEmail());
                     return true;
                 }
@@ -131,39 +127,26 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public void findPassword(String email) {
-        String code = generateCode();
-        try {
-            if (authCacheRepository.existsFindPasswordKey(email))
-                throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
-            emailService.sendFindPasswordEmail(email, code);
-            authCacheRepository.saveFindPassword(email, code);
-        } catch (MessagingException e) {
-            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
-        }
+        if (authCacheRepository.existsFindPasswordKey(email))
+            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
+        emailService.sendFindPasswordEmail(email);
     }
 
     @Override
     public void resendEmail(String email, String type) {
         userMapper.findByEmail(email).ifPresent(user -> {
-            String code = generateCode();
-            try {
-                switch (type) {
-                    case "sign-up" -> {
-                        if (authCacheRepository.existsFindPasswordKey(email))
-                            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
-                        emailService.sendSignUpEmail(email, "", code);
-                        authCacheRepository.saveConfirm(email, code);
-                    }
-                    case "find-password" -> {
-                        if (authCacheRepository.existsFindPasswordKey(email))
-                            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
-                        emailService.sendFindPasswordEmail(email, code);
-                        authCacheRepository.saveFindPassword(email, code);
-                    }
-                    default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+            switch (type) {
+                case "sign-up" -> {
+                    if (authCacheRepository.existsFindPasswordKey(email))
+                        throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
+                    emailService.sendSignUpEmail(email, email);
                 }
-            } catch (MessagingException e) {
-                throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+                case "find-password" -> {
+                    if (authCacheRepository.existsFindPasswordKey(email))
+                        throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
+                    emailService.sendFindPasswordEmail(email);
+                }
+                default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
             }
         });
     }
@@ -177,6 +160,7 @@ public class AuthServiceImpl implements AuthService {
     public void resetPassword(ResetPassword resetPassword) {
         userMapper.findByEmail(resetPassword.getEmail()).ifPresent(user -> {
             user.resetPassword(passwordEncoder.encode(resetPassword.getPassword()));
+            userMapper.update(user);
         });
     }
 
@@ -204,7 +188,5 @@ public class AuthServiceImpl implements AuthService {
         return userMapper.existsByUsername(username);
     }
 
-    private String generateCode() {
-        return String.valueOf((int) (Math.random() * 899999) + 100000);
-    }
+
 }

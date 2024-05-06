@@ -29,7 +29,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         String redirectUrl;
         if (principal.isEnabled()) {
-            System.out.println(request.getQueryString());
             JwtToken token = jwtTokenService.generateTokenByOAuth2(principal);
             redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")
                     .queryParam("access_token", token.getAccessToken())
@@ -39,10 +38,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.addCookie(cookie);
         } else {
             redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")
+                    .queryParam("isNew", principal.isNew())
                     .queryParam("error", "이메일 인증을 완료해주세요.")
                     .toUriString();
         }
-        
+
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         super.onAuthenticationSuccess(request, response, authentication);
     }

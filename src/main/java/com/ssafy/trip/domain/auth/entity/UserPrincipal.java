@@ -18,6 +18,8 @@ import java.util.Map;
 public class UserPrincipal implements UserDetails, OAuth2User {
     @Getter
     private final transient User user;
+    @Getter
+    private transient boolean isNew;
     private transient Map<String, Object> attributes;
 
     @Override
