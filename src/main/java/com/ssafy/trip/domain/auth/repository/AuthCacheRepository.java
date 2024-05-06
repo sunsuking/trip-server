@@ -49,9 +49,20 @@ public class AuthCacheRepository {
         return redisTemplate.opsForValue().get(key);
     }
 
+    public void deleteFindPassword(String email) {
+        String key = CacheKey.findPasswordCodeKey(email);
+        redisTemplate.delete(key);
+    }
+
     public String confirm(String email) {
         String key = CacheKey.emailConfirmCodeKey(email);
         return redisTemplate.opsForValue().get(key);
+    }
+
+    public void deleteConfirm(String email) {
+        String key = CacheKey.emailConfirmCodeKey(email);
+        System.out.println(key);
+        redisTemplate.delete(key);
     }
 
     public Object findRefreshKeyInTokenValidate(String username) {

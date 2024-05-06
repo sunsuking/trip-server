@@ -14,4 +14,6 @@ public interface UserMapper {
     boolean existsByUsername(String username);
 
     void save(User user);
+
+    void resetPassword(String username, String password);
 }

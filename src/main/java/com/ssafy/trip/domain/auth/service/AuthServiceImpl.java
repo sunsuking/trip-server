@@ -6,6 +6,7 @@ import com.ssafy.trip.domain.auth.entity.TokenValidate;
 import com.ssafy.trip.domain.auth.repository.AuthCacheRepository;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -74,9 +75,9 @@ public class AuthServiceImpl implements AuthService {
         try {
             emailService.sendSignUpEmail(signUp.getEmail(), signUp.getNickname(), code);
             if (authCacheRepository.existsConfirmKey(signUp.getEmail()))
-                throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+                throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
             authCacheRepository.saveConfirm(signUp.getEmail(), code);
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
         userMapper.save(User.createLocalUser(signUp));
@@ -103,17 +104,23 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public boolean confirm(Confirm confirm) {
-        String value = switch (confirm.getType()) {
-            case "sign-up" -> authCacheRepository.confirm(confirm.getEmail());
-            case "find-password" -> authCacheRepository.findPassword(confirm.getEmail());
+        switch (confirm.getType()) {
+            case "sign-up" -> {
+                String code = authCacheRepository.confirm(confirm.getEmail());
+                if (confirm.getCode().equals(code)) {
+                    userMapper.findByEmail(confirm.getEmail()).ifPresent(User::confirmEmail);
+                    authCacheRepository.deleteConfirm(confirm.getEmail());
+                    return true;
+                }
+            }
+            case "find-password" -> {
+                String code = authCacheRepository.findPassword(confirm.getEmail());
+                if (confirm.getCode().equals(code)) {
+                    return true;
+                }
+            }
             default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
-        };
-
-        if (confirm.getCode().equals(value)) {
-            userMapper.findByEmail(confirm.getEmail()).ifPresent(User::confirmEmail);
-            return true;
         }
-
         return false;
     }
 
@@ -127,9 +134,10 @@ public class AuthServiceImpl implements AuthService {
         String code = generateCode();
         try {
             if (authCacheRepository.existsFindPasswordKey(email))
-                throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+                throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
+            emailService.sendFindPasswordEmail(email, code);
             authCacheRepository.saveFindPassword(email, code);
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
         }
     }
@@ -142,21 +150,33 @@ public class AuthServiceImpl implements AuthService {
                 switch (type) {
                     case "sign-up" -> {
                         if (authCacheRepository.existsFindPasswordKey(email))
-                            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+                            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
                         emailService.sendSignUpEmail(email, "", code);
                         authCacheRepository.saveConfirm(email, code);
                     }
                     case "find-password" -> {
                         if (authCacheRepository.existsFindPasswordKey(email))
-                            throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
+                            throw new CustomException(ErrorCode.ALREADY_EMAIL_SEND);
                         emailService.sendFindPasswordEmail(email, code);
                         authCacheRepository.saveFindPassword(email, code);
                     }
                     default -> throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
                 }
-            } catch (Exception e) {
+            } catch (MessagingException e) {
                 throw new CustomException(ErrorCode.EMAIL_SEND_FAILED);
             }
+        });
+    }
+
+    /**
+     * 비밀번호 재설정
+     *
+     * @param resetPassword {@link ResetPassword}
+     */
+    @Override
+    public void resetPassword(ResetPassword resetPassword) {
+        userMapper.findByEmail(resetPassword.getEmail()).ifPresent(user -> {
+            user.resetPassword(passwordEncoder.encode(resetPassword.getPassword()));
         });
     }
 
@@ -167,21 +187,17 @@ public class AuthServiceImpl implements AuthService {
      * @return newJwtToken {@link JwtToken}
      */
     @Override
-    public JwtToken refresh(String refreshToken) {
+    public JwtToken refresh(String refreshToken) throws Exception {
         // * 토큰 유효성 검사
-        try {
-            String username = jwtTokenService.getUsername(refreshToken);
-            if (username == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+        String username = jwtTokenService.getUsername(refreshToken);
+        if (username == null) throw new CustomException(ErrorCode.INVALID_TOKEN);
 
-            Object redisRefreshToken = authCacheRepository.findRefreshKeyInTokenValidate(username);
-            if (Objects.equals(redisRefreshToken, refreshToken)) {
-                throw new CustomException(ErrorCode.USER_ALREADY_SIGN_OUT);
-            }
-
-            return jwtTokenService.generateTokenByRefreshToken(refreshToken);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN, e.getMessage());
+        Object redisRefreshToken = authCacheRepository.findRefreshKeyInTokenValidate(username);
+        if (Objects.equals(redisRefreshToken, refreshToken)) {
+            throw new CustomException(ErrorCode.USER_ALREADY_SIGN_OUT);
         }
+
+        return jwtTokenService.generateTokenByRefreshToken(refreshToken);
     }
 
     private boolean existsByUsername(String username) {

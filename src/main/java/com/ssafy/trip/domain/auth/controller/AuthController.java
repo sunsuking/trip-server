@@ -124,7 +124,7 @@ public class AuthController {
      * @param errors  {@link Errors}
      * @return 성공 응답
      */
-    @GetMapping("/confirm")
+    @PostMapping("/confirm")
     @ResponseStatus(value = HttpStatus.OK)
     public SuccessResponse<Void> confirm(
             @RequestBody @Validated AuthData.Confirm confirm,
@@ -156,6 +156,27 @@ public class AuthController {
     }
 
     /**
+     * 비밀번호 재설정
+     *
+     * @param resetPassword {@link ResetPassword}
+     * @param errors        {@link Errors}
+     * @return 성공 응답
+     */
+    @PostMapping("/reset-password")
+    @ResponseStatus(value = HttpStatus.OK)
+    public SuccessResponse<Void> resetPassword(
+            @RequestBody @Validated ResetPassword resetPassword,
+            Errors errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE, errors);
+        }
+
+        authService.resetPassword(resetPassword);
+        return SuccessResponse.empty();
+    }
+
+    /**
      * 토큰 재발급
      *
      * @param request  {@link HttpServletRequest}
@@ -169,9 +190,17 @@ public class AuthController {
             HttpServletResponse response
     ) {
         Cookie cookie = parseRefreshCookie(request);
-        JwtToken newToken = authService.refresh(cookie.getValue());
-        response.addCookie(createCookie(newToken));
-        return SuccessResponse.of(newToken);
+        try {
+            JwtToken newToken = authService.refresh(cookie.getValue());
+            response.addCookie(createCookie(newToken));
+            return SuccessResponse.of(newToken);
+        } catch (CustomException exception) {
+            removeCookie(response, "refreshToken");
+            throw exception;
+        } catch (Exception e) {
+            removeCookie(response, "refreshToken");
+            throw new CustomException(ErrorCode.INVALID_TOKEN, e.getMessage());
+        }
     }
 
 
@@ -184,7 +213,7 @@ public class AuthController {
 
     private Cookie createCookie(JwtToken token) {
         Cookie refreshTokenCookie = new Cookie("refreshToken", token.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setMaxAge((int) authProperties.getRefreshTokenExpiry() / 1000);
         refreshTokenCookie.setPath("/");
         return refreshTokenCookie;
@@ -192,7 +221,7 @@ public class AuthController {
 
     private void removeCookie(HttpServletResponse response, String key) {
         Cookie cookie = new Cookie(key, null);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);

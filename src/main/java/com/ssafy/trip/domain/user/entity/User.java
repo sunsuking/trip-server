@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 public class User {
-    private final boolean isLocked = false;
+
     private Long id;
     private String username;
     private String email;
@@ -19,6 +19,7 @@ public class User {
     private ProviderType providerType;
     private RoleType roleType = RoleType.USER;
     private boolean isEmailVerified = false;
+    private boolean isLocked;
 
     /**
      * 소셜 로그인 기반 신규 유저 생성
@@ -36,6 +37,7 @@ public class User {
         user.email = attribute.getEmail();
         user.providerType = provider;
         user.roleType = RoleType.USER;
+        user.isLocked = false;
         return user;
     }
 
@@ -52,10 +54,15 @@ public class User {
         user.password = signUp.getPassword();
         user.providerType = ProviderType.LOCAL;
         user.roleType = RoleType.USER;
+        user.isLocked = false;
         return user;
     }
 
     public void confirmEmail() {
         this.isEmailVerified = true;
+    }
+
+    public void resetPassword(String password) {
+        this.password = password;
     }
 }

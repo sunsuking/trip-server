@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new JwtException("유효한 JWT 토큰이 없습니다");
             }
         } catch (Exception e) {
+            SecurityContextHolder.clearContext();
             request.setAttribute("error-message", e.getMessage());
         }
         doFilter(request, response, filterChain);
@@ -55,8 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (!entries.isEmpty()) {
             TokenValidate validate = TokenValidate.fromMap(entries);
             Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("refreshToken")).findFirst().ifPresent(cookie -> {
-                if (validate.getRefreshToken().equals(cookie.getValue()))
+                if (validate.getRefreshToken().equals(cookie.getValue())) {
+                    SecurityContextHolder.clearContext();
                     throw new CustomException(ErrorCode.USER_ALREADY_SIGN_OUT);
+                }
             });
         }
     }

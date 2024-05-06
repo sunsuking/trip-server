@@ -1,6 +1,5 @@
 package com.ssafy.trip.domain.auth.service;
 
-import com.ssafy.trip.domain.auth.dto.AuthData.*;
 import com.ssafy.trip.domain.user.entity.User;
 
 import static com.ssafy.trip.domain.auth.dto.AuthData.*;
@@ -18,5 +17,7 @@ public interface AuthService {
 
     void resendEmail(String email, String type);
 
-    JwtToken refresh(String refreshToken);
+    void resetPassword(ResetPassword resetPassword);
+
+    JwtToken refresh(String refreshToken) throws Exception;
 }

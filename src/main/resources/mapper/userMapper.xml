@@ -21,4 +21,10 @@
         INSERT INTO users (username, email, password, nickname, profile_image, provider_type, role_type)
         VALUES (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{providerType}, #{roleType});
     </insert>
+
+    <update id="resetPassword">
+        UPDATE users
+        SET password = #{password}
+        WHERE username = #{username};
+    </update>
 </mapper>

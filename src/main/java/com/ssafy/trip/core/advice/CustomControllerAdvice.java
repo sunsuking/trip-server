@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class BranduControllerAdvice {
+public class CustomControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -24,9 +24,9 @@ public class BranduControllerAdvice {
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleBranduException(CustomException exception) {
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
 //        exception.printStackTrace();
-        log.error("BranduException: {}", exception.getMessage());
+        log.error("CustomException: {}", exception.getMessage());
         return ResponseEntity.status(exception.getErrorCode().getStatus())
                 .body(ErrorResponse.of(exception));
     }

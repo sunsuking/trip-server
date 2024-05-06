@@ -25,10 +25,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
     private final String[] permitAll = {
-            "/api/v1/auth/sign-in",
-            "/api/v1/auth/sign-up",
-            "/api/v1/auth/confirm",
-            "/api/v1/auth/resend-email",
+            "/api/v1/auth/**",
             "/actuator/**",
             "/h2-console/**"
     };

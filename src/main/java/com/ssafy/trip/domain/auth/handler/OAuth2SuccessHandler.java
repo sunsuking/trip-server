@@ -1,7 +1,9 @@
 package com.ssafy.trip.domain.auth.handler;
 
 import com.ssafy.trip.core.properties.AuthProperties;
+import com.ssafy.trip.domain.auth.dto.AuthData.JwtToken;
 import com.ssafy.trip.domain.auth.entity.UserPrincipal;
+import com.ssafy.trip.domain.auth.service.JwtTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,28 +21,35 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private final JwtTokenService jwtTokenService;
     private final AuthProperties authProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        // TODO: principal 을 이용하여 accessToken 과 refreshToken 을 발급받아야 한다.
-
-        String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:3000")
-                .queryParam("access_token", "")
-                .queryParam("refresh_token", "")
-                .toUriString();
-
-        Cookie cookie = createCookie("refreshToken");
-        response.addCookie(cookie);
-
+        String redirectUrl;
+        if (principal.isEnabled()) {
+            System.out.println(request.getQueryString());
+            JwtToken token = jwtTokenService.generateTokenByOAuth2(principal);
+            redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")
+                    .queryParam("access_token", token.getAccessToken())
+                    .queryParam("refresh_token", token.getRefreshToken())
+                    .toUriString();
+            Cookie cookie = createCookie(token.getRefreshToken());
+            response.addCookie(cookie);
+        } else {
+            redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:5173/oauth2/redirect")
+                    .queryParam("error", "이메일 인증을 완료해주세요.")
+                    .toUriString();
+        }
+        
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         super.onAuthenticationSuccess(request, response, authentication);
     }
 
     private Cookie createCookie(String refreshToken) {
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setMaxAge((int) (authProperties.getRefreshTokenExpiry() / 1000));
         refreshTokenCookie.setPath("/");
         return refreshTokenCookie;
