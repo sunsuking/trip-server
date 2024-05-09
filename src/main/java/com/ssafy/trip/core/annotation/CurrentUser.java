@@ -10,6 +10,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-@AuthenticationPrincipal(expression = "#this == 'annoymousUser' ? null : @userPrincipalService.loadUserByUsername(#this.getUsername()).user", errorOnInvalidType = true)
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : @fetchUser.apply(#this)", errorOnInvalidType = true)
 public @interface CurrentUser {
 }

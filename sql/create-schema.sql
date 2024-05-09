@@ -1,8 +1,8 @@
+# 유저 테이블
 DROP TABLE IF EXISTS users;
-
 CREATE TABLE users
 (
-    id                INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,
     username          VARCHAR(255)                                                                   NOT NULL,
     email             VARCHAR(255)                                                                   NOT NULL,
     password          VARCHAR(255)                                                                   NOT NULL,
@@ -17,4 +17,13 @@ CREATE TABLE users
     CONSTRAINT users_email_unique UNIQUE (email),
     CONSTRAINT users_username_unique UNIQUE (username)
 );
+
+# 공지사항 테이블
+CREATE TABLE notices
+(
+    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    title      VARCHAR(255)                        NOT NULL,
+    content    TEXT                                NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+)
 

@@ -27,7 +27,8 @@ public class SecurityConfig {
     private final String[] permitAll = {
             "/api/v1/auth/**",
             "/actuator/**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/api/v1/user/me"
     };
 
     private final OAuth2SuccessHandler successHandler;

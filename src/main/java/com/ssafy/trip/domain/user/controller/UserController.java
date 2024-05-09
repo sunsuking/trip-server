@@ -2,7 +2,7 @@ package com.ssafy.trip.domain.user.controller;
 
 import com.ssafy.trip.core.annotation.CurrentUser;
 import com.ssafy.trip.core.response.SuccessResponse;
-import com.ssafy.trip.domain.user.dto.UserData.Profile;
+import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,10 @@ public class UserController {
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public SuccessResponse<Profile> me(@CurrentUser User user) {
-        return SuccessResponse.of(userService.convertToProfile(user));
+    public SuccessResponse<UserData.LoginUser> me(@CurrentUser User user) {
+        if (user == null) {
+            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
+        }
+        return SuccessResponse.of(UserData.LoginUser.authenticated(user));
     }
 }
