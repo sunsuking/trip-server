@@ -50,7 +50,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         registry -> registry.requestMatchers(permitAll).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .oauth2Login(configurer -> configurer
                         .authorizationEndpoint(authorization -> authorization.baseUri("/oauth2/authorization"))
