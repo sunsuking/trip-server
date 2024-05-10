@@ -28,7 +28,8 @@ public class SecurityConfig {
             "/api/v1/auth/**",
             "/actuator/**",
             "/h2-console/**",
-            "/api/v1/user/me"
+            "/api/v1/user/me",
+            "/api/v1/notice/**"
     };
 
     private final OAuth2SuccessHandler successHandler;

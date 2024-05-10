@@ -18,7 +18,7 @@ public class CustomControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorResponse handleException(Exception exception) {
-//        exception.printStackTrace();
+        exception.printStackTrace();
         log.error("Exception: {}", exception.getMessage());
         return ErrorResponse.of(exception);
     }

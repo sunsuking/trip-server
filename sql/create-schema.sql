@@ -1,5 +1,5 @@
 # 유저 테이블
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
     user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,
