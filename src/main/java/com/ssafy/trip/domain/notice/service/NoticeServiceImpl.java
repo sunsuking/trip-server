@@ -3,20 +3,24 @@ package com.ssafy.trip.domain.notice.service;
 import com.ssafy.trip.domain.notice.entity.Notice;
 import com.ssafy.trip.domain.notice.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class NoticeServiceImpl implements NoticeService{
+public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeMapper noticeMapper;
 
     @Override
     public List<Notice> findNotices() {
-        return noticeMapper.findNotices();
+        List<Notice> list = noticeMapper.findNotices();
+        log.debug("{}",list);
+        return list;
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
-import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.review.service.ReviewService;
 import com.ssafy.trip.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -39,7 +37,6 @@ public class ReviewController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<Void> create(@RequestBody Create create, @CurrentUser User user) {
-        log.debug("{} , {}", create, user.getUserId());
         reviewService.saveReview(create, user.getUserId());
         return SuccessResponse.empty();
     }

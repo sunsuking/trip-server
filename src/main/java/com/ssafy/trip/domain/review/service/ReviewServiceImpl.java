@@ -1,10 +1,8 @@
 package com.ssafy.trip.domain.review.service;
 
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
-import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.review.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
