@@ -1,6 +1,6 @@
-# 유저 테이블
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS notices CASCADE;
+# 유저 테이블
 CREATE TABLE users
 (
     user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,

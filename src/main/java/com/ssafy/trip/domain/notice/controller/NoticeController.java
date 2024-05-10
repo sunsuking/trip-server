@@ -21,7 +21,7 @@ public class NoticeController {
     // 공지사항 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<Notice>> notice() {
-        List<Notice> list = noticeService.findNotice();
+        List<Notice> list = noticeService.findNotices();
         if (list != null && !list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -32,7 +32,7 @@ public class NoticeController {
     // 공지사항 단건 조회
     @GetMapping("/view/{noticeId}")
     public ResponseEntity<Optional<Notice>> searchByTitle(@PathVariable Long noticeId) {
-        Optional<Notice> notice = noticeService.findByTitle(noticeId);
+        Optional<Notice> notice = noticeService.findNoticeById(noticeId);
         return new ResponseEntity<>(notice, HttpStatus.OK);
     }
 

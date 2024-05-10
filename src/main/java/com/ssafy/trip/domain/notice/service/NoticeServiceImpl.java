@@ -15,13 +15,13 @@ public class NoticeServiceImpl implements NoticeService{
     private final NoticeMapper noticeMapper;
 
     @Override
-    public List<Notice> findNotice() {
-        return noticeMapper.findNotice();
+    public List<Notice> findNotices() {
+        return noticeMapper.findNotices();
     }
 
     @Override
-    public Optional<Notice> findByTitle(Long noticeId) {
-        return noticeMapper.findByTitle(noticeId);
+    public Optional<Notice> findNoticeById(Long noticeId) {
+        return noticeMapper.findNoticeById(noticeId);
     }
 
     @Override

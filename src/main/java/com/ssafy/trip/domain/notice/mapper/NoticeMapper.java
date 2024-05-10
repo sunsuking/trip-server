@@ -10,10 +10,10 @@ import java.util.Optional;
 public interface NoticeMapper {
 
     // 공지사항 전체 조회
-    List<Notice> findNotice();
+    List<Notice> findNotices();
 
     // 공지사항 단건 조회
-    Optional<Notice> findByTitle(Long noticeId);
+    Optional<Notice> findNoticeById(Long noticeId);
 
     // 공지사항 등록
     void save(Notice notice);
