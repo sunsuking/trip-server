@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.trip.domain.tour.mapper.TourMapper">
+    <!--  SELECT  -->
+    <select id="findAll">
+        SELECT *
+        FROM tour_with_address;
+    </select>
+
+    <select id="findById">
+        SELECT *
+        FROM tour_with_address
+        WHERE tour_id = #{tourId};
+    </select>
+
+    <select id="findWithContentById">
+        SELECT *
+        FROM tour_with_content
+        WHERE tour_id = #{tourId};
+    </select>
+
+    <select id="findWithContentByKeyword" resultType="com.ssafy.trip.domain.tour.entity.TourWithContent">
+        SELECT *
+        FROM tour_with_content
+        WHERE city = #{city}
+          AND name LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+
+    <select id="findCategories">
+        SELECT *
+        FROM tour_content;
+    </select>
+</mapper>
