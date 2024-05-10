@@ -1,5 +1,6 @@
 # 유저 테이블
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS notices CASCADE;
 CREATE TABLE users
 (
     user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -21,7 +22,7 @@ CREATE TABLE users
 # 공지사항 테이블
 CREATE TABLE notices
 (
-    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    notice_id         INTEGER PRIMARY KEY AUTO_INCREMENT,
     title      VARCHAR(255)                        NOT NULL,
     content    TEXT                                NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
