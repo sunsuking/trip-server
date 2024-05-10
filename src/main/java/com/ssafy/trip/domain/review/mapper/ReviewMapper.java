@@ -2,20 +2,20 @@ package com.ssafy.trip.domain.review.mapper;
 
 import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
+import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.Review;
 import org.apache.ibatis.annotations.Mapper;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Mapper
 public interface ReviewMapper {
     // SELECT
-    List<Review> getReviews();
+    List<Detail> getReviews();
 
-    Optional<Review> findById(long reviewId);
+    Optional<Detail> findById(long reviewId);
 
 
     // List<Comment> getComments();
@@ -25,7 +25,7 @@ public interface ReviewMapper {
     // void deleteComment(long commentId);
     //
     // INSERT
-    void saveReview(Create create);
+    Long saveReview(Create create, long authorId);
 
     // UPDATE
     void updateReview(Update update);
@@ -38,4 +38,6 @@ public interface ReviewMapper {
     void saveLike(long reviewId, long userId);
 
     void deleteLike(long reviewId, long userId);
+
+    void saveImg(Long reviewId, String imgUrl);
 }

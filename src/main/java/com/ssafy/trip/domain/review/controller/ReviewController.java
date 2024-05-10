@@ -2,7 +2,9 @@ package com.ssafy.trip.domain.review.controller;
 
 import com.ssafy.trip.core.annotation.CurrentUser;
 import com.ssafy.trip.core.response.SuccessResponse;
+import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
+import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.review.service.ReviewService;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -22,22 +25,22 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public SuccessResponse<List<Review>> list() {
-        return SuccessResponse.of(reviewService.getReviews());
+    public SuccessResponse<List<Detail>> list() {
+        List<Detail> list = reviewService.getReviews();
+        log.debug("{}",list);
+        return SuccessResponse.of(list);
     }
 
     @GetMapping("/{id}")
-    public SuccessResponse<Review> view(@PathVariable("id") Long id) {
-        return SuccessResponse.of(
-                reviewService.findById(id)
-                        .orElseThrow(() -> new RuntimeException("존재하지 않는 여행 후기입니다.")));
+    public SuccessResponse<Detail> view(@PathVariable("id") Long id) {
+        return SuccessResponse.of(reviewService.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 여행 후기입니다.")));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SuccessResponse<Void> create(@RequestBody Create create) {
-        log.debug("{}", create);
-        reviewService.saveReview(create);
+    public SuccessResponse<Void> create(@RequestBody Create create, @CurrentUser User user) {
+        log.debug("{} , {}", create, user.getUserId());
+        reviewService.saveReview(create, user.getUserId());
         return SuccessResponse.empty();
     }
 
