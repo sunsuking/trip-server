@@ -17,5 +17,5 @@ public interface TourMapper {
 
     TourWithContent findWithContentById(int tourId);
 
-    List<TourWithContent> findWithContentByKeyword(String city, String keyword);
+    List<TourWithContent> findWithContentByKeyword(int city, String keyword);
 }

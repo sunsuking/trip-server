@@ -6,7 +6,7 @@ import com.ssafy.trip.domain.tour.entity.Category;
 import java.util.List;
 
 public interface TourService {
-    List<TourData.Search> findTourByKeyword(String city, String keyword);
+    List<TourData.Search> findTourByKeyword(int city, String keyword);
 
     List<Category> getCategories();
 }
