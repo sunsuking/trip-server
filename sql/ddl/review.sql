@@ -12,6 +12,14 @@ CREATE TABLE IF NOT EXISTS review (
     CONSTRAINT foreign_key_review_tour_id FOREIGN KEY (tour_id) REFERENCES tour(tour_id) ON DELETE CASCADE
 );
 
+# 리뷰 사진 테이블
+CREATE TABLE IF NOT EXISTS review_img (
+    review_id INT NOT NULL,
+    img VARCHAR(255) NOT NULL,
+    PRIMARY KEY (review_id, img),
+    CONSTRAINT foreign_key_review_img_review_id FOREIGN KEY (review_id) REFERENCES review(review_id) ON DELETE CASCADE
+);
+
 # 리뷰 댓글 테이블
 CREATE TABLE IF NOT EXISTS review_comment (
     comment_id INT PRIMARY KEY AUTO_INCREMENT,

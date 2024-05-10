@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.trip.domain.review.mapper.ReviewMapper">
+    <resultMap id="reviewResultMap" type="com.ssafy.trip.domain.review.dto.ReviewData$Detail">
+        <id column="review_id" property="reviewId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="authorName" property="authorName"/>
+        <result column="email" property="authorEmail"/>
+        <result column="tour_id" property="tourId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="like_count" property="likeCount"/>
+        <collection property="imgUrls" ofType="String" javaType="ArrayList">
+            <result column="img" property="imgUrl"/>
+        </collection>
+    </resultMap>
+
     <!--SELECT-->
-    <select id="getReviews">
-        SELECT review_id,
-               title,
-               content,
-               author_id,
-               tour_id,
-               created_at,
-               updated_at,
-               like_count
-        FROM review;
-    </select>
-    <select id="findById">
-        SELECT review_id,
-               title,
-               content,
-               author_id,
-               tour_id,
-               created_at,
-               updated_at,
-               like_count
-        FROM review
-        WHERE review_id = #{reviewId}
+    <!-- TODO: 추후 tour table과 조인 -->
+    <select id="getReviews" resultMap="reviewResultMap">
+        SELECT r.review_id,
+               r.title,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               r.like_count,
+               i.img
+        FROM review r LEFT JOIN review_img i ON r.review_id = i.review_id
+                      JOIN users u ON r.author_id = u.user_id
+        ORDER BY r.created_at DESC;
     </select>
 
-    <insert id="saveReview">
+    <select id="findById" resultMap="reviewResultMap">
+        SELECT r.review_id,
+               r.title,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               r.like_count,
+               i.img
+        FROM review r LEFT JOIN review_img i ON r.review_id = i.review_id
+                      JOIN users u ON r.author_id = u.user_id
+        WHERE r.review_id = #{reviewId}
+        ORDER BY r.created_at DESC
+    </select>
+
+    <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
         INSERT INTO review(title, content, author_id, tour_id)
-        VALUES (#{title}, #{content}, #{authorId}, #{tourId})
+        VALUES (#{create.title}, #{create.content}, #{authorId}, #{create.tourId})
     </insert>
 
     <update id="updateReview">
@@ -63,4 +88,9 @@
         DELETE FROM review_like
         WHERE review_id = #{reviewId} AND user_id = #{userId};
     </delete>
+
+    <insert id="saveImg">
+        INSERT INTO review_img (review_id, img)
+        VALUES (#{reviewId}, #{imgUrl});
+    </insert>
 </mapper>

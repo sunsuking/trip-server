@@ -2,6 +2,7 @@ package com.ssafy.trip.domain.review.service;
 
 import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
+import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.review.mapper.ReviewMapper;
@@ -10,22 +11,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
 
     @Override
-    public List<Review> getReviews() {
+    public List<Detail> getReviews() {
         return reviewMapper.getReviews();
     }
 
     @Override
-    public Optional<Review> findById(long reviewId) {
+    public Optional<Detail> findById(long reviewId) {
         return reviewMapper.findById(reviewId);
     }
 
@@ -36,8 +38,15 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void saveReview(Create create) {
-        reviewMapper.saveReview(create);
+    public void saveReview(Create create, long authorId) {
+        reviewMapper.saveReview(create, authorId);
+        saveImg(create.getReviewId(), create.getImgUrls());
+    }
+
+    @Override
+    @Transactional
+    public void saveImg(Long reviewId, String[] imgUrls) {
+        Arrays.stream(imgUrls).forEach((imgUrl) -> reviewMapper.saveImg(reviewId,imgUrl));
     }
 
     @Override
