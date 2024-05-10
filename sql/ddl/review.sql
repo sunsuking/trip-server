@@ -1,7 +1,6 @@
 # 리뷰 테이블
 CREATE TABLE IF NOT EXISTS review (
     review_id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
     author_id INT NOT NULL,
     tour_id INT NOT NULL,

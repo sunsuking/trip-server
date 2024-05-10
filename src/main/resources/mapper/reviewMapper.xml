@@ -3,14 +3,14 @@
 <mapper namespace="com.ssafy.trip.domain.review.mapper.ReviewMapper">
     <resultMap id="reviewResultMap" type="com.ssafy.trip.domain.review.dto.ReviewData$Detail">
         <id column="review_id" property="reviewId"/>
-        <result column="title" property="title"/>
         <result column="content" property="content"/>
-        <result column="authorName" property="authorName"/>
-        <result column="email" property="authorEmail"/>
         <result column="tour_id" property="tourId"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <result column="like_count" property="likeCount"/>
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="profileImage" property="profileImage"/>
         <collection property="imgUrls" ofType="String" javaType="ArrayList">
             <result column="img" property="imgUrl"/>
         </collection>
@@ -20,23 +20,22 @@
     <!-- TODO: 추후 tour table과 조인 -->
     <select id="getReviews" resultMap="reviewResultMap">
         SELECT r.review_id,
-               r.title,
                r.content,
-               u.nickname as authorName,
-               u.email,
                r.tour_id,
                r.created_at,
                r.updated_at,
                r.like_count,
-               i.img
+               i.img,
+               u.user_id,
+               u.username,
+               u.profile_image
         FROM review r LEFT JOIN review_img i ON r.review_id = i.review_id
                       JOIN users u ON r.author_id = u.user_id
-        ORDER BY r.created_at DESC;
+        ORDER BY r.created_at DESC
     </select>
 
     <select id="findById" resultMap="reviewResultMap">
         SELECT r.review_id,
-               r.title,
                r.content,
                u.nickname as authorName,
                u.email,
@@ -52,21 +51,19 @@
     </select>
 
     <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
-        INSERT INTO review(title, content, author_id, tour_id)
-        VALUES (#{create.title}, #{create.content}, #{authorId}, #{create.tourId})
+        INSERT INTO review(content, author_id, tour_id)
+        VALUES (#{create.content}, #{authorId}, #{create.tourId})
     </insert>
 
     <update id="updateReview">
         UPDATE review
-        SET title   = #{title},
-            content = #{content},
+        SET content = #{content},
             tour_id=#{tourId}
         WHERE review_id = #{reviewId};
     </update>
 
     <delete id="deleteReview">
-        DELETE
-        FROM review
+        DELETE FROM review
         WHERE review_id = #{reviewId};
     </delete>
 

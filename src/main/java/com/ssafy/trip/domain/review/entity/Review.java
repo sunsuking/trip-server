@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 public class Review {
     private Long reviewId;
-    private String title;
     private String content;
     private String authorId;
     private int tourId;
