@@ -56,7 +56,13 @@ public class ReviewController {
 
     @PostMapping("like/{id}")
     public SuccessResponse<Void> like(@PathVariable("id") Long reviewId, @CurrentUser User user) {
-        log.debug("{}",user.getUserId());
+        reviewService.saveLike(reviewId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("like/{id}")
+    public SuccessResponse<Void> unLike(@PathVariable("id") Long reviewId, @CurrentUser User user) {
+        reviewService.deleteLike(reviewId, user.getUserId());
         return SuccessResponse.empty();
     }
 }
