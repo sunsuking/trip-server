@@ -22,7 +22,7 @@ public class TourController {
 
     @GetMapping("/search")
     public SuccessResponse<List<TourData.Search>> searchKeyword(
-            @RequestParam(value = "city") String city,
+            @RequestParam(value = "city") int city,
             @RequestParam(value = "query", required = false) String query
     ) {
         if (!StringUtils.hasText(query)) {

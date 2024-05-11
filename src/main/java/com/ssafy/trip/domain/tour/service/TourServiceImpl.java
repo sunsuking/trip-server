@@ -16,7 +16,7 @@ public class TourServiceImpl implements TourService {
     private final TourMapper tourMapper;
 
     @Override
-    public List<TourData.Search> findTourByKeyword(String city, String keyword) {
+    public List<TourData.Search> findTourByKeyword(int city, String keyword) {
         return tourMapper.findWithContentByKeyword(city, keyword).stream().map(TourData.Search::of).toList();
     }
 

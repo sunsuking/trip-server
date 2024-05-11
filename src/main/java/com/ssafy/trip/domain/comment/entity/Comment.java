@@ -1,23 +1,19 @@
-package com.ssafy.trip.domain.review.entity;
+package com.ssafy.trip.domain.comment.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Setter
 @RequiredArgsConstructor
 @ToString
-public class Review {
+public class Comment {
+    private Long commentId;
     private Long reviewId;
-    private String content;
     private Long userId;
-    private int tourId;
+    private String content;
     private String createdAt;
     private String updatedAt;
-    private int likeCount;
-    private List<String> imgUrls;
 }

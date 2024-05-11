@@ -22,7 +22,7 @@
     <select id="findWithContentByKeyword" resultType="com.ssafy.trip.domain.tour.entity.TourWithContent">
         SELECT *
         FROM tour_with_content
-        WHERE city = #{city}
+        WHERE city_code = #{city}
           AND name LIKE CONCAT('%', #{keyword}, '%');
     </select>
 

@@ -22,7 +22,7 @@ CREATE TABLE users
 # 공지사항 테이블
 CREATE TABLE notices
 (
-    notice_id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    notice_id  INTEGER PRIMARY KEY AUTO_INCREMENT,
     title      VARCHAR(255)                        NOT NULL,
     content    TEXT                                NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -45,17 +45,20 @@ FROM tour T
          LEFT JOIN town O ON O.town_code = T.town_code AND O.city_code = T.city_code
     );
 
+DROP VIEW tour_with_content;
+
 CREATE VIEW tour_with_content AS
 (
 SELECT T.tour_id,
        T.content_type_id,
-       TC.name AS content_type,
+       TC.name     AS content_type,
        T.name,
        address,
        zip_code,
        background_image,
-       C.name  AS city,
-       O.name  AS town,
+       C.name      AS city,
+       C.city_code AS city_code,
+       O.name      AS town,
        TD.description,
        TD.telephone,
        TD.latitude,
