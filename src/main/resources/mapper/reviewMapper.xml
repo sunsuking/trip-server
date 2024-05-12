@@ -27,7 +27,7 @@
                r.like_count,
                i.img,
                u.user_id,
-               u.username,
+               u.nickname,
                u.profile_image
         FROM review r
                  LEFT JOIN review_img i ON r.review_id = i.review_id
@@ -39,7 +39,7 @@
             <if test="key != null and key != '' and keyword != ''">
                 <choose>
                     <when test="key == 'nickname'">
-                        u.username LIKE CONCAT('%', #{keyword}, '%')
+                        u.nickname LIKE CONCAT('%', #{keyword}, '%')
                     </when>
                     <otherwise>
                         r.${key} LIKE CONCAT('%', #{keyword}, '%')
@@ -59,7 +59,7 @@
                r.like_count,
                i.img,
                u.user_id,
-               u.username,
+               u.nickname,
                u.profile_image
         FROM review r
         LEFT JOIN review_img i ON r.review_id = i.review_id
