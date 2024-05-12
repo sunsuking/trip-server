@@ -4,10 +4,11 @@ import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
-import com.ssafy.trip.domain.review.entity.Review;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.ssafy.trip.domain.review.dto.ReviewData.*;
 
 public interface ReviewService {
     List<Detail> getReviews();
@@ -27,4 +28,6 @@ public interface ReviewService {
     void deleteReview(long reviewId);
 
     void deleteLike(long reviewId, long userId);
+
+    List<Detail> search(Search search);
 }

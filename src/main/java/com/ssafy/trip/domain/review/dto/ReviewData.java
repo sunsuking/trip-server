@@ -31,9 +31,14 @@ public class ReviewData {
         private String updatedAt;
         private int likeCount;
         private List<String> imgUrls;
-
         private Long userId;
         private String nickname;
         private String profileImage;
+    }
+
+    @Data
+    public static class Search {
+        private String key;
+        private String keyword;
     }
 }
