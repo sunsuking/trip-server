@@ -18,9 +18,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public List<Notice> findNotices() {
-        List<Notice> list = noticeMapper.findNotices();
-        log.debug("{}",list);
-        return list;
+        return noticeMapper.findNotices();
     }
 
     @Override
