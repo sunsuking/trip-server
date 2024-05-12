@@ -2,9 +2,9 @@ package com.ssafy.trip.domain.review.controller;
 
 import com.ssafy.trip.core.annotation.CurrentUser;
 import com.ssafy.trip.core.response.SuccessResponse;
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
+import com.ssafy.trip.domain.review.dto.ReviewData.Search;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.service.ReviewService;
 import com.ssafy.trip.domain.user.entity.User;
@@ -24,14 +24,17 @@ public class ReviewController {
 
     @GetMapping
     public SuccessResponse<List<Detail>> list() {
-        List<Detail> list = reviewService.getReviews();
-        log.debug("{}",list);
-        return SuccessResponse.of(list);
+        return SuccessResponse.of(reviewService.getReviews());
     }
 
     @GetMapping("/{id}")
     public SuccessResponse<Detail> view(@PathVariable("id") Long id) {
         return SuccessResponse.of(reviewService.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 여행 후기입니다.")));
+    }
+
+    @GetMapping("/search")
+    public SuccessResponse<List<Detail>> view(@ModelAttribute Search search) {
+        return SuccessResponse.of(reviewService.search(search));
     }
 
     @PostMapping

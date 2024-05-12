@@ -1,7 +1,9 @@
 package com.ssafy.trip.domain.review.service;
 
+import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
+import com.ssafy.trip.domain.review.dto.ReviewData.Search;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<Detail> getReviews() {
         return reviewMapper.getReviews();
+    }
+
+    @Override
+    public List<Detail> search(Search search) {
+        log.debug("{}", search);
+        return reviewMapper.search(search);
     }
 
     @Override
@@ -70,4 +78,6 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteLike(long reviewId, long userId) {
         reviewMapper.deleteLike(reviewId, userId);
     }
+
+
 }
