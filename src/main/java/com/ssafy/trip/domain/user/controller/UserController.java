@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+ 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
     public SuccessResponse<UserData.LoginUser> me(@CurrentUser User user) {
