@@ -1,40 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.trip.domain.review.mapper.ReviewMapper">
-    <resultMap id="reviewResultMap" type="com.ssafy.trip.domain.review.dto.ReviewData$Detail">
+    <resultMap id="simpleUser" type="com.ssafy.trip.domain.user.entity.SimpleUser">
+        <id column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="profile_image" property="profileImage"/>
+    </resultMap>
+    <resultMap id="reviewWithUser" type="com.ssafy.trip.domain.review.entity.ReviewWithUser">
         <id column="review_id" property="reviewId"/>
+        <result column="is_liked" property="isLiked"/>
         <result column="content" property="content"/>
         <result column="tour_id" property="tourId"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="address" property="address"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
-        <result column="like_count" property="likeCount"/>
-        <result column="user_id" property="userId"/>
-        <result column="nickname" property="nickname"/>
-        <result column="profileImage" property="profileImage"/>
-        <collection property="imgUrls" ofType="String" javaType="ArrayList">
-            <result column="img" property="imgUrl"/>
+        <association property="user" resultMap="simpleUser"/>
+        <collection property="images" ofType="String" javaType="ArrayList">
+            <result column="image" property="imgUrl"/>
         </collection>
     </resultMap>
 
-    <!--SELECT-->
-    <!-- TODO: 추후 tour table과 조인 -->
-    <select id="getReviews" resultMap="reviewResultMap">
-        SELECT r.review_id,
-               r.content,
-               r.tour_id,
-               r.created_at,
-               r.updated_at,
-               r.like_count,
-               i.img,
-               u.user_id,
-               u.username,
-               u.profile_image
-        FROM review r LEFT JOIN review_img i ON r.review_id = i.review_id
-                      JOIN users u ON r.author_id = u.user_id
-        ORDER BY r.created_at DESC
+    <select id="findPagingIds">
+        SELECT review_id
+        FROM review
+        ORDER BY review_id DESC
+        LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
-    <select id="findById" resultMap="reviewResultMap">
+    <select id="findReviews" resultMap="reviewWithUser">
+        SELECT R.review_id,
+        R.content,
+        R.tour_id,
+        R.created_at,
+        R.updated_at,
+        I.image,
+        R.like_count,
+        U.user_id,
+        U.nickname,
+        U.profile_image,
+        T.address,
+        IFNULL(RL.user_id = #{userId}, 0) AS is_liked
+        FROM review R
+        LEFT JOIN review_images I ON R.review_id = I.review_id
+        LEFT JOIN review_like RL ON R.review_id = RL.review_id AND RL.user_id = #{userId}
+        LEFT JOIN tour T ON R.tour_id = T.tour_id
+        JOIN users U ON R.user_id = U.user_id
+        WHERE R.review_id IN
+        <foreach collection="reviewIds" item="reviewId" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </select>
+
+    <select id="countReviews" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+    </select>
+
+    <select id="findById" resultMap="reviewWithUser">
         SELECT r.review_id,
                r.content,
                u.nickname as authorName,
@@ -43,15 +66,16 @@
                r.created_at,
                r.updated_at,
                r.like_count,
-               i.img
-        FROM review r LEFT JOIN review_img i ON r.review_id = i.review_id
-                      JOIN users u ON r.author_id = u.user_id
+               i.image
+        FROM review r
+                 LEFT JOIN review_images i ON r.review_id = i.review_id
+                 JOIN users u ON r.user_id = u.user_id
         WHERE r.review_id = #{reviewId}
         ORDER BY r.created_at DESC
     </select>
 
     <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
-        INSERT INTO review(content, author_id, tour_id)
+        INSERT INTO review(content, user_id, tour_id)
         VALUES (#{create.content}, #{authorId}, #{create.tourId})
     </insert>
 
@@ -63,7 +87,8 @@
     </update>
 
     <delete id="deleteReview">
-        DELETE FROM review
+        DELETE
+        FROM review
         WHERE review_id = #{reviewId};
     </delete>
 
@@ -78,16 +103,18 @@
 
     <insert id="saveLike">
         INSERT INTO review_like(review_id, user_id)
-        VALUES (#{reviewId},#{userId});
+        VALUES (#{reviewId}, #{userId});
     </insert>
 
     <delete id="deleteLike">
-        DELETE FROM review_like
-        WHERE review_id = #{reviewId} AND user_id = #{userId};
+        DELETE
+        FROM review_like
+        WHERE review_id = #{reviewId}
+          AND user_id = #{userId};
     </delete>
 
     <insert id="saveImg">
-        INSERT INTO review_img (review_id, img)
+        INSERT INTO review_images (review_id, image)
         VALUES (#{reviewId}, #{imgUrl});
     </insert>
 </mapper>

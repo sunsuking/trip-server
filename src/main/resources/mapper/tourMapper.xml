@@ -22,8 +22,14 @@
     <select id="findWithContentByKeyword" resultType="com.ssafy.trip.domain.tour.entity.TourWithContent">
         SELECT *
         FROM tour_with_content
-        WHERE city_code = #{city}
-          AND name LIKE CONCAT('%', #{keyword}, '%');
+        <where>
+            <if test="city != 0">
+                AND city_code = #{city}
+            </if>
+            <if test="keyword != null">
+                AND name LIKE CONCAT('%', #{keyword}, '%');
+            </if>
+        </where>
     </select>
 
     <select id="findCategories">

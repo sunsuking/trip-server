@@ -1,11 +1,10 @@
 package com.ssafy.trip.domain.review.mapper;
 
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
-import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
-import com.ssafy.trip.domain.review.entity.Review;
+import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +12,14 @@ import java.util.Optional;
 @Mapper
 public interface ReviewMapper {
     // SELECT
-    List<Detail> getReviews();
+    List<ReviewWithUser> findReviews(List<Long> reviewIds, long userId);
 
-    Optional<Detail> findById(long reviewId);
+    List<Long> findPagingIds(Pageable pageable);
 
+    int countReviews();
 
-    // List<Comment> getComments();
-    // Optional<Comment> findById(long commentId);
-    // void saveComment(Comment comment);
-    // void updateComment(Comment comment);
-    // void deleteComment(long commentId);
-    //
+    Optional<ReviewWithUser> findById(long reviewId);
+
     // INSERT
     Long saveReview(Create create, long authorId);
 

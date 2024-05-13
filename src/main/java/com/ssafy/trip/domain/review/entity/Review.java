@@ -1,23 +1,19 @@
 package com.ssafy.trip.domain.review.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
-@ToString
+@Data
 public class Review {
     private Long reviewId;
+    private boolean isLiked;
+    private String address;
     private String content;
-    private Long userId;
     private int tourId;
-    private String createdAt;
-    private String updatedAt;
     private int likeCount;
-    private List<String> imgUrls;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private List<String> images;
 }
