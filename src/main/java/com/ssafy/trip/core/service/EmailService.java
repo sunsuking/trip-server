@@ -1,4 +1,4 @@
-package com.ssafy.trip.domain.auth.service;
+package com.ssafy.trip.core.service;
 
 import com.ssafy.trip.core.exception.CustomException;
 import com.ssafy.trip.core.exception.ErrorCode;

@@ -1,12 +1,10 @@
 package com.ssafy.trip.domain.review.mapper;
 
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
-import com.ssafy.trip.domain.review.dto.ReviewData.Detail;
-import com.ssafy.trip.domain.review.dto.ReviewData.Search;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
-import com.ssafy.trip.domain.review.entity.Review;
+import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +12,13 @@ import java.util.Optional;
 @Mapper
 public interface ReviewMapper {
     // SELECT
-    List<Detail> getReviews();
+    List<ReviewWithUser> findReviews(List<Long> reviewIds, long userId);
 
-    List<Detail> search(Search search);
+    List<Long> findPagingIds(Pageable pageable);
 
-    Optional<Detail> findById(long reviewId);
+    int countReviews();
+
+    Optional<ReviewWithUser> findById(long reviewId);
 
     // INSERT
     Long saveReview(Create create, long authorId);
@@ -36,6 +36,4 @@ public interface ReviewMapper {
     void deleteLike(long reviewId, long userId);
 
     void saveImg(Long reviewId, String imgUrl);
-
-
 }

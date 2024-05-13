@@ -22,7 +22,7 @@ public class TourController {
 
     @GetMapping("/search")
     public SuccessResponse<List<TourData.Search>> searchKeyword(
-            @RequestParam(value = "city") int city,
+            @RequestParam(value = "city", defaultValue = "0") int city,
             @RequestParam(value = "query", required = false) String query
     ) {
         if (!StringUtils.hasText(query)) {
@@ -32,7 +32,7 @@ public class TourController {
         List<TourData.Search> tours = tourService.findTourByKeyword(city, query);
         return SuccessResponse.of(tours);
     }
-
+    
     @GetMapping("/category")
     public SuccessResponse<List<Category>> categories() {
         return SuccessResponse.of(tourService.getCategories());

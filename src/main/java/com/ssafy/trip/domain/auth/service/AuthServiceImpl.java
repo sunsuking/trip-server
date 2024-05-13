@@ -2,6 +2,7 @@ package com.ssafy.trip.domain.auth.service;
 
 import com.ssafy.trip.core.exception.CustomException;
 import com.ssafy.trip.core.exception.ErrorCode;
+import com.ssafy.trip.core.service.EmailService;
 import com.ssafy.trip.domain.auth.entity.TokenValidate;
 import com.ssafy.trip.domain.auth.repository.AuthCacheRepository;
 import com.ssafy.trip.domain.user.entity.User;
