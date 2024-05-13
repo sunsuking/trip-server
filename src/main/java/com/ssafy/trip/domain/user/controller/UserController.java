@@ -1,6 +1,8 @@
 package com.ssafy.trip.domain.user.controller;
 
 import com.ssafy.trip.core.annotation.CurrentUser;
+import com.ssafy.trip.core.exception.CustomException;
+import com.ssafy.trip.core.exception.ErrorCode;
 import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.entity.User;
@@ -13,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
@@ -28,7 +26,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public SuccessResponse<UserData.LoginUser> me(@CurrentUser User user) {
         if (user == null) {
-            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
     }
