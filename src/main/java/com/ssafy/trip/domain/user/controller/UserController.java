@@ -8,6 +8,7 @@ import com.ssafy.trip.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.StringTokenizer;
 
 @Slf4j
@@ -31,5 +33,11 @@ public class UserController {
             return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getAllUser() {
+        List<User> list = userService.findAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

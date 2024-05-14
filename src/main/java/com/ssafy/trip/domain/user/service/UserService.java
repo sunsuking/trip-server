@@ -1,6 +1,10 @@
 package com.ssafy.trip.domain.user.service;
 
 
-public interface UserService {
+import com.ssafy.trip.domain.user.entity.User;
 
+import java.util.List;
+
+public interface UserService {
+    List<User> findAll();
 }

@@ -1,9 +1,12 @@
 package com.ssafy.trip.domain.user.service;
 
+import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -12,4 +15,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
 
+    @Override
+    public List<User> findAll() {
+        return userMapper.findAll();
+    }
 }
