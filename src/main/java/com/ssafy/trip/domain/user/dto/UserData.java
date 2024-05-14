@@ -50,4 +50,9 @@ public class UserData {
                     .build();
         }
     }
+
+    @Data
+    public static class Update {
+        private String nickname;
+    }
 }

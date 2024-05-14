@@ -4,6 +4,7 @@ import com.ssafy.trip.domain.auth.attribute.OAuth2Attribute;
 import com.ssafy.trip.domain.auth.dto.AuthData;
 import com.ssafy.trip.domain.auth.entity.ProviderType;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -63,5 +64,10 @@ public class User {
 
     public void resetPassword(String password) {
         this.password = password;
+    }
+
+    public void updateProfile(String nickname, String profileImage ){
+        this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 }
