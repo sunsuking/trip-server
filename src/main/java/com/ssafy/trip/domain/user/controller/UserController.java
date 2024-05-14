@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -39,5 +36,11 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser() {
         List<User> list = userService.findAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PatchMapping("/update/{userId}")
+    public ResponseEntity<Void> updateIsLocked(@PathVariable Long userId) {
+        userService.updateIsLocked(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

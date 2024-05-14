@@ -4,7 +4,8 @@
     <!-- 공지사항 전체 조회   -->
     <select id="findNotices">
         SELECT *
-        FROM notices;
+        FROM notices
+        ORDER BY notice_id desc;
     </select>
 
     <!-- 공지사항 단건 조회   -->

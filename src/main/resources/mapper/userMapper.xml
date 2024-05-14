@@ -38,4 +38,10 @@
             is_email_verified = #{isEmailVerified}
         WHERE user_id = #{userId};
     </update>
+
+    <update id="updateIsLocked">
+        UPDATE users
+        SET is_locked = !is_locked
+        WHERE user_id = #{userId};
+    </update>
 </mapper>
