@@ -39,6 +39,7 @@ public class UserController {
             @RequestParam(value = "profileImage",required = false) MultipartFile  profileImage,
             @CurrentUser User user
     ) {
+        log.debug(" 업데이트 정보 : {}",update);
         userService.update(update,profileImage,user);
         return SuccessResponse.empty();
     }

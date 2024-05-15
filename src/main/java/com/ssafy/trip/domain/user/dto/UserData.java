@@ -35,6 +35,8 @@ public class UserData {
         private String email;
         private String nickname;
         private String profileImage;
+        private int cityCode;
+        private int townCode;
         private RoleType roleType;
         private boolean isEmailVerified;
 
@@ -45,6 +47,8 @@ public class UserData {
                     .email(user.getEmail())
                     .nickname(user.getNickname())
                     .profileImage(user.getProfileImage())
+                    .cityCode(user.getCityCode())
+                    .townCode(user.getTownCode())
                     .roleType(user.getRoleType())
                     .isEmailVerified(user.isEmailVerified())
                     .build();
@@ -55,5 +59,6 @@ public class UserData {
     public static class Update {
         private String nickname;
         private int cityCode;
+        private int townCode;
     }
 }

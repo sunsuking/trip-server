@@ -5,10 +5,12 @@ import com.ssafy.trip.domain.auth.dto.AuthData;
 import com.ssafy.trip.domain.auth.entity.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Getter
+@ToString
 public class User {
     private Long userId;
     private String username;
@@ -18,6 +20,8 @@ public class User {
     private String profileImage;
     private ProviderType providerType;
     private RoleType roleType = RoleType.USER;
+    private int cityCode;
+    private int townCode;
     private boolean isEmailVerified = false;
     private boolean isLocked;
 
@@ -66,8 +70,10 @@ public class User {
         this.password = password;
     }
 
-    public void updateProfile(String nickname, String profileImage ){
+    public void updateProfile(String nickname, int cityCode, int townCode,String profileImage ){
         this.nickname = nickname;
+        this.cityCode = cityCode;
+        this.townCode = townCode;
         this.profileImage = profileImage;
     }
 }

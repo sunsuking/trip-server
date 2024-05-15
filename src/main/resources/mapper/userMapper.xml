@@ -31,7 +31,9 @@
             profile_image     = #{profileImage},
             provider_type     = #{providerType},
             role_type         = #{roleType},
-            is_email_verified = #{isEmailVerified}
+            is_email_verified = #{isEmailVerified},
+            city_code = #{cityCode},
+            town_code = #{townCode}
         WHERE user_id = #{userId};
     </update>
 </mapper>

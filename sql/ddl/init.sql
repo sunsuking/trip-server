@@ -24,16 +24,16 @@ CREATE TABLE users
     profile_image     VARCHAR(500)                                                                   NULL,
     provider_type     enum ('LOCAL', 'GOOGLE', 'GITHUB', 'KAKAO', 'NAVER') DEFAULT 'LOCAL'           NOT NULL,
     role_type         enum ('USER', 'ADMIN')                               DEFAULT 'USER'            NOT NULL,
-    cityCode          INTEGER                                                                        NULL,
-    townCode          INTEGER                                                                        NULL,
+    city_code          INTEGER                                                                        NULL,
+    town_code          INTEGER                                                                        NULL,
     is_email_verified BOOLEAN                                              DEFAULT FALSE             NOT NULL,
     is_locked         BOOLEAN                                              DEFAULT FALSE             NOT NULL,
     created_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT users_email_unique UNIQUE (email),
     CONSTRAINT users_username_unique UNIQUE (username),
-    CONSTRAINT foreign_key_users_city FOREIGN KEY (cityCode) REFERENCES city(city_code),
-    CONSTRAINT foreign_key_users_town FOREIGN KEY (townCOde) REFERENCES town(town_code)
+    CONSTRAINT foreign_key_users_city FOREIGN KEY (city_code) REFERENCES city(city_code),
+    CONSTRAINT foreign_key_users_town FOREIGN KEY (town_code) REFERENCES town(town_code)
 );
 
 
