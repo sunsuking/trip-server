@@ -2,11 +2,13 @@ package com.ssafy.trip.domain.user.service;
 
 import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final S3UploadService s3UploadService;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void update(Update update, MultipartFile profileImage, User user) {
@@ -30,5 +32,16 @@ public class UserServiceImpl implements UserService {
         }
         user.updateProfile(update.getNickname(),update.getCityCode(),update.getTownCode(),imageSrc);
         userMapper.update(user);
+    }
+
+    @Override
+    public void updatePassword(Password password, User user) {
+        user.resetPassword(passwordEncoder.encode(password.getPassword()));
+        userMapper.update(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        userMapper.delete(user.getUserId());
     }
 }
