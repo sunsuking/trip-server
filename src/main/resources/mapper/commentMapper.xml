@@ -16,6 +16,13 @@
         WHERE review_id = #{reviewId}
     </select>
 
+    <!--  TODO : 정보를 어디까지 가져갈껀지에 대해서 생각하기  -->
+    <select id="listByUserId" resultMap="commentResultMap">
+        SELECT c.comment_id, c.user_id, u.nickname, c.content, c.created_at, u.profile_image
+        FROM review_comment c JOIN users u ON c.user_id = u.user_id
+        WHERE c.user_id = #{userId}
+    </select>
+
     <insert id="save">
         INSERT INTO review_comment(review_id, user_id, content)
         VALUES (#{reviewId}, #{userId}, #{content});

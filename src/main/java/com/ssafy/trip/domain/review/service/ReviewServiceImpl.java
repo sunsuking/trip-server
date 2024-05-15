@@ -16,10 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,6 +43,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Optional<SimpleReview> findById(long reviewId) {
         return reviewMapper.findById(reviewId).map(SimpleReview::of);
+    }
+
+    @Override
+    public List<SimpleReview> getReviewsFindById(Long userId) {
+        List<ReviewWithUser> allById = reviewMapper.findAllById(userId);
+        return allById.stream().map(SimpleReview::of).collect(Collectors.toList());
     }
 
     @Override

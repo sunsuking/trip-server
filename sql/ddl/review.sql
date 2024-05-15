@@ -1,8 +1,9 @@
 # 리뷰 테이블
-DROP table review_like;
-DROP table review_comment;
-DROP table review_images;
-DROP table review;
+
+DROP table IF EXISTS review_like;
+DROP table IF EXISTS review_comment;
+DROP table IF EXISTS review_images;
+DROP table IF EXISTS review;
 CREATE TABLE IF NOT EXISTS review
 (
     review_id  INT PRIMARY KEY AUTO_INCREMENT,

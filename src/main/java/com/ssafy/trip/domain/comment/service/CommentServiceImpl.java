@@ -28,6 +28,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Detail> listByUserId(Long userId) {
+        return commentMapper.listByUserId(userId);
+    }
+
+    @Override
     public void delete(Long commentId) {
         commentMapper.delete(commentId);
     }
