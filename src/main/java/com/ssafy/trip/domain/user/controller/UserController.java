@@ -3,17 +3,17 @@ package com.ssafy.trip.domain.user.controller;
 import com.ssafy.trip.core.annotation.CurrentUser;
 import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
@@ -31,5 +31,15 @@ public class UserController {
             return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
+    }
+
+    @PatchMapping("/me")
+    public SuccessResponse<Void> image(
+            Update update,
+            @RequestParam(value = "profileImage",required = false) MultipartFile  profileImage,
+            @CurrentUser User user
+    ) {
+        userService.update(update,profileImage,user);
+        return SuccessResponse.empty();
     }
 }
