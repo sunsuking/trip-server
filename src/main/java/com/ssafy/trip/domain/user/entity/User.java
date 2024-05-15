@@ -54,6 +54,7 @@ public class User {
     public static User createLocalUser(AuthData.SignUp signUp) {
         User user = new User();
         user.username = signUp.getUsername();
+        user.nickname = signUp.getNickname();
         user.email = signUp.getEmail();
         user.password = signUp.getPassword();
         user.providerType = ProviderType.LOCAL;
