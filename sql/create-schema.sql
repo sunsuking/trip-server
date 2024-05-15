@@ -46,7 +46,6 @@ FROM tour T
     );
 
 DROP VIEW tour_with_content;
-
 CREATE VIEW tour_with_content AS
 (
 SELECT T.tour_id,
