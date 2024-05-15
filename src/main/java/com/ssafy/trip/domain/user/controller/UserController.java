@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public SuccessResponse<Void> image(
+    public SuccessResponse<Void> update(
             Update update,
             @RequestParam(value = "profileImage",required = false) MultipartFile  profileImage,
             @CurrentUser User user

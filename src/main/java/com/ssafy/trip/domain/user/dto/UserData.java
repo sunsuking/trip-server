@@ -54,5 +54,6 @@ public class UserData {
     @Data
     public static class Update {
         private String nickname;
+        private int cityCode;
     }
 }

@@ -36,4 +36,15 @@
         SELECT *
         FROM tour_content;
     </select>
+
+    <select id="findCities">
+        SELECT *
+        FROM city;
+    </select>
+
+    <select id="findTowns">
+        SELECT town_code, name
+        FROM town
+        WHERE city_code = #{cityCode}
+    </select>
 </mapper>
