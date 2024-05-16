@@ -98,3 +98,4 @@ CREATE TABLE step
     CONSTRAINT step_vehicle_id_fk FOREIGN KEY (vehicle_id) REFERENCES vehicle (vehicle_id)
 );
 
+SELECT * FROM users;

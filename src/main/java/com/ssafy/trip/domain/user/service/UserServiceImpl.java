@@ -1,12 +1,13 @@
 package com.ssafy.trip.domain.user.service;
 
+import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
+import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
+import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.core.service.S3UploadService;
-import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
-import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import java.util.List;
-
-import static com.ssafy.trip.domain.user.dto.UserData.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(Update update, MultipartFile profileImage, User user) {
         String imageSrc = user.getProfileImage();
-        if(Objects.nonNull(profileImage)){
+        if (Objects.nonNull(profileImage)) {
             CompletableFuture<String> future = s3UploadService.upload(profileImage);
             imageSrc = future.join();
         }
-        if(update.isDefaultImage()){
+        if (update.isDefaultImage()) {
             imageSrc = User.DEFAULT_IMAGE;
         }
-        user.updateProfile(update.getNickname(),update.getCityCode(),update.getTownCode(),imageSrc);
+        user.updateProfile(update.getNickname(), update.getCityCode(), update.getTownCode(), imageSrc);
         userMapper.update(user);
     }
 
@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
     public void updateIsLocked(Long userId) {
         userMapper.updateIsLocked(userId);
     }
+
     @Override
     public void updatePassword(Password password, User user) {
         user.resetPassword(passwordEncoder.encode(password.getPassword()));
@@ -61,5 +62,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User user) {
         userMapper.delete(user.getUserId());
+    }
+
+    @Override
+    public List<SimpleComment> commentsByUserId(Long userId) {
+        return userMapper.commentsByUserId(userId);
+    }
+
+    @Override
+    public List<UserData.SimpleReview> getReviewsById(Long userId) {
+        return userMapper.getReviewsById(userId);
+    }
+
+    @Override
+    public List<UserData.SimpleReview> getLikedReviewsById(Long userId) {
+        return userMapper.getLikedReviewsById(userId);
+    }
+
+    @Override
+    public UserData.SimpleProfile findById(Long userId) {
+        return userMapper.findById(userId);
     }
 }

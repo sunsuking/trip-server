@@ -96,23 +96,6 @@
         WHERE R.review_id = #{reviewId}
     </select>
 
-    <select id="findAllById" resultMap="reviewWithUser">
-        SELECT r.review_id,
-               r.content,
-               u.nickname as authorName,
-               u.email,
-               r.tour_id,
-               r.created_at,
-               r.updated_at,
-               r.like_count,
-               i.image
-        FROM review r
-         LEFT JOIN review_images i ON r.review_id = i.review_id
-            JOIN users u ON r.user_id = u.user_id
-        WHERE u.user_id = #{userId}
-        ORDER BY r.created_at DESC
-    </select>
-
     <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
         INSERT INTO review(content, user_id, tour_id)
         VALUES (#{create.content}, #{authorId}, #{create.tourId})

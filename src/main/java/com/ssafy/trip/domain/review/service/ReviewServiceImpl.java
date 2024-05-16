@@ -52,13 +52,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<SimpleReview> getReviewsFindById(Long userId) {
-        List<ReviewWithUser> allById = reviewMapper.findAllById(userId);
-        return allById.stream().map(SimpleReview::of).collect(Collectors.toList());
-    }
-
-
-    @Override
     public List<SimpleReview> getLikedReviews(Long userId) {
         List<ReviewWithUser> LikedAllById = reviewMapper.findLikedAllById(userId);
         return LikedAllById.stream().map(SimpleReview::of).collect(Collectors.toList());

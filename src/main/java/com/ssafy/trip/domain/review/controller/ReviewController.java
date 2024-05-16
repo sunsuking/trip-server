@@ -6,6 +6,7 @@ import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
+import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.service.ReviewService;
 import com.ssafy.trip.domain.user.entity.User;
@@ -25,17 +26,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final S3UploadService s3UploadService;
 
     /**
      * 리뷰 목록 조회
      *
      * @param pageable {@link Pageable} 페이지 정보
      * @param user     {@link User} 현재 사용자
-     * @return {@link ReviewData.SimpleReview} 리뷰 목록
+     * @return {@link SimpleReview} 리뷰 목록
      */
     @GetMapping("")
-    public SuccessResponse<CustomPage<ReviewData.SimpleReview>> getReviews(
+    public SuccessResponse<CustomPage<SimpleReview>> getReviews(
             @PageableDefault(size = 12) Pageable pageable,
             @CurrentUser User user
     ) {
@@ -133,14 +133,6 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @GetMapping("/{userId}")
-    public SuccessResponse<List<ReviewData.SimpleReview>> getReviews(@PathVariable("userId")Long userId) {
-        return SuccessResponse.of(reviewService.getReviewsFindById(userId));
-    }
 
-    @GetMapping("/like/{userId}")
-    public SuccessResponse<List<ReviewData.SimpleReview>> getLikedReviews(@PathVariable("userId")Long userId) {
-        return SuccessResponse.of(reviewService.getLikedReviews(userId));
-    }
 }
 

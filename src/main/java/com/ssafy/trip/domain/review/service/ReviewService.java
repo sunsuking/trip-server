@@ -17,8 +17,6 @@ public interface ReviewService {
 
     Optional<ReviewData.Review> findById(Long reviewId, Long userId);
 
-    List<SimpleReview> getReviewsFindById(Long userId);
-
     List<ReviewData.CommentResponse> findByReviewId(Long reviewId);
 
     void saveComment(Long reviewId, CommentCreate create, Long userId);

@@ -1,3 +1,4 @@
+alter table review AUTO_INCREMENT = 3;
 INSERT INTO review (content, user_id, tour_id)
 VALUES ('물품이 깔끔하고 잘 포장되어 도착했습니다. 빠른 배송에 감사드립니다.', 2, 125405),
        ('지역 맛집을 소개해 주셔서 정말 감사합니다. 맛있는 음식을 맛볼 수 있어서 기쁘네요.', 2, 125406),

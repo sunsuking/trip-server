@@ -11,4 +11,13 @@ public class Comment {
     private SimpleUser user;
     private String content;
     private LocalDateTime createdAt;
+
+    @Data
+    public static class SimpleComment {
+        private Long commentId;
+        private Long reviewId;
+        private LocalDateTime createdAt;
+        private String content;
+        private String reviewContent;
+    }
 }
