@@ -36,6 +36,9 @@ public class UserServiceImpl implements UserService {
             CompletableFuture<String> future = s3UploadService.upload(profileImage);
             imageSrc = future.join();
         }
+        if(update.isDefaultImage()){
+            imageSrc = User.DEFAULT_IMAGE;
+        }
         user.updateProfile(update.getNickname(),update.getCityCode(),update.getTownCode(),imageSrc);
         userMapper.update(user);
     }
