@@ -28,14 +28,23 @@
 
     <update id="update">
         UPDATE users
-        SET username          = #{username},
+        <set>
+            username          = #{username},
             email             = #{email},
             password          = #{password},
             nickname          = #{nickname},
             profile_image     = #{profileImage},
             provider_type     = #{providerType},
             role_type         = #{roleType},
-            is_email_verified = #{isEmailVerified}
+            is_email_verified = #{isEmailVerified},
+            <!-- cityCode와 townCode가 제공되었는지 확인 -->
+            <if test="cityCode != 0">
+                city_code = #{cityCode},
+            </if>
+            <if test="townCode != 0">
+                town_code = #{townCode}
+            </if>
+        </set>
         WHERE user_id = #{userId};
     </update>
 
@@ -44,4 +53,10 @@
         SET is_locked = !is_locked
         WHERE user_id = #{userId};
     </update>
+
+    <delete id="delete">
+        DELETE FROM users
+        WHERE user_id = #{userId}
+    </delete>
+
 </mapper>

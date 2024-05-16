@@ -22,8 +22,12 @@ public class CommentController {
 
     @GetMapping("/{reviewId}")
     public SuccessResponse<List<Detail>> list(@PathVariable("reviewId") Long reviewId) {
-        log.debug("호출");
         return SuccessResponse.of(commentService.list(reviewId));
+    }
+
+    @GetMapping("/user/{userId}")
+    public SuccessResponse<List<Detail>> listByUserId(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(commentService.listByUserId(userId));
     }
 
     @PostMapping

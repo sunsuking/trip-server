@@ -1,5 +1,7 @@
 package com.ssafy.trip.domain.user.mapper;
 
+import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,4 +24,6 @@ public interface UserMapper {
     void update(User user);
 
     void updateIsLocked(Long userId);
+
+    void delete(Long userId);
 }

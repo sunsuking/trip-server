@@ -72,4 +72,10 @@ public class ReviewController {
         reviewService.deleteLike(reviewId, user.getUserId());
         return SuccessResponse.empty();
     }
+
+    @GetMapping("/{userId}")
+    public SuccessResponse<List<ReviewData.SimpleReview>> getReviews(@PathVariable("userId")Long userId) {
+        log.debug("{}", userId);
+        return SuccessResponse.of(reviewService.getReviewsFindById(userId));
+    }
 }

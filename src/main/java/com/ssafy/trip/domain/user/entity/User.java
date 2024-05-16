@@ -4,10 +4,13 @@ import com.ssafy.trip.domain.auth.attribute.OAuth2Attribute;
 import com.ssafy.trip.domain.auth.dto.AuthData;
 import com.ssafy.trip.domain.auth.entity.ProviderType;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Getter
+@ToString
 public class User {
     private Long userId;
     private String username;
@@ -17,6 +20,8 @@ public class User {
     private String profileImage;
     private ProviderType providerType;
     private RoleType roleType = RoleType.USER;
+    private int cityCode;
+    private int townCode;
     private boolean isEmailVerified = false;
     private boolean isLocked;
 
@@ -49,6 +54,7 @@ public class User {
     public static User createLocalUser(AuthData.SignUp signUp) {
         User user = new User();
         user.username = signUp.getUsername();
+        user.nickname = signUp.getNickname();
         user.email = signUp.getEmail();
         user.password = signUp.getPassword();
         user.providerType = ProviderType.LOCAL;
@@ -63,5 +69,12 @@ public class User {
 
     public void resetPassword(String password) {
         this.password = password;
+    }
+
+    public void updateProfile(String nickname, int cityCode, int townCode,String profileImage ){
+        this.nickname = nickname;
+        this.cityCode = cityCode;
+        this.townCode = townCode;
+        this.profileImage = profileImage;
     }
 }

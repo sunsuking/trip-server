@@ -45,8 +45,8 @@ FROM tour T
          LEFT JOIN town O ON O.town_code = T.town_code AND O.city_code = T.city_code
     );
 
-DROP VIEW tour_with_content;
 
+DROP VIEW tour_with_content;
 CREATE VIEW tour_with_content AS
 (
 SELECT T.tour_id,

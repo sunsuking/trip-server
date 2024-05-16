@@ -1,6 +1,8 @@
 package com.ssafy.trip.domain.review.mapper;
 
+import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
+import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,6 +17,8 @@ public interface ReviewMapper {
     List<ReviewWithUser> findReviews(List<Long> reviewIds, long userId);
 
     List<Long> findPagingIds(Pageable pageable);
+
+    List<ReviewWithUser> findAllById(Long userId);
 
     int countReviews();
 
@@ -36,4 +40,6 @@ public interface ReviewMapper {
     void deleteLike(long reviewId, long userId);
 
     void saveImg(Long reviewId, String imgUrl);
+
+
 }

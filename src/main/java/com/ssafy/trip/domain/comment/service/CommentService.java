@@ -10,8 +10,11 @@ public interface CommentService {
 
     List<Detail> list(Long reviewId);
 
+    List<Detail> listByUserId(Long userId);
+
     void delete(Long commentId);
 
     void update();
+
 
 }

@@ -15,4 +15,6 @@ public interface CommentMapper {
     void update();
 
     List<Detail> list(Long reviewId);
+
+    List<Detail> listByUserId(Long userId);
 }
