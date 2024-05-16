@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,12 @@ public class NoticeController {
 
     // 공지사항 등록
     @PostMapping("/create")
-    public ResponseEntity<Void> save(@RequestBody Notice noticeDto) {
+    public ResponseEntity<Void> save(
+            Notice noticeDto,
+            @RequestParam("images") List<MultipartFile> images
+        ) {
+        System.out.println(noticeDto);
+        System.out.println(images);
         noticeService.save(noticeDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
