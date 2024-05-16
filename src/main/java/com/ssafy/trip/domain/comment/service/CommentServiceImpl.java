@@ -1,7 +1,9 @@
 package com.ssafy.trip.domain.comment.service;
 
+import com.ssafy.trip.domain.comment.dto.CommentData;
 import com.ssafy.trip.domain.comment.dto.CommentData.Create;
 import com.ssafy.trip.domain.comment.dto.CommentData.Detail;
+import com.ssafy.trip.domain.comment.dto.CommentData.SimpleDetail;
 import com.ssafy.trip.domain.comment.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void update() {
+    }
 
+    @Override
+    public List<SimpleDetail> simpleCommentListByUserId(Long userId) {
+        return commentMapper.simpleCommentListByUserId(userId);
     }
 }

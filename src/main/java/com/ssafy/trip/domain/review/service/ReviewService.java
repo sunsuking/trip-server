@@ -31,4 +31,6 @@ public interface ReviewService {
     void deleteReview(long reviewId);
 
     void deleteLike(long reviewId, long userId);
+
+    List<SimpleReview> getLikedReviews(Long userId);
 }

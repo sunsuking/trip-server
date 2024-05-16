@@ -23,9 +23,18 @@
         WHERE c.user_id = #{userId}
     </select>
 
+
+    <select id="simpleCommentListByUserId">
+        SELECT c.comment_id, c.review_id, c.created_at, c.content, r.content as simpleReviewContent
+        FROM review_comment c
+            JOIN users u ON c.user_id = u.user_id
+            JOIN review r ON c.review_id = r.review_id
+        WHERE c.user_id = #{userId}
+
+    </select>
+
     <insert id="save">
         INSERT INTO review_comment(review_id, user_id, content)
         VALUES (#{reviewId}, #{userId}, #{content});
     </insert>
-
 </mapper>

@@ -1,7 +1,9 @@
 package com.ssafy.trip.domain.comment.service;
 
+import com.ssafy.trip.domain.comment.dto.CommentData;
 import com.ssafy.trip.domain.comment.dto.CommentData.Create;
 import com.ssafy.trip.domain.comment.dto.CommentData.Detail;
+import com.ssafy.trip.domain.comment.dto.CommentData.SimpleDetail;
 
 import java.util.List;
 
@@ -17,4 +19,5 @@ public interface CommentService {
     void update();
 
 
+    List<SimpleDetail> simpleCommentListByUserId(Long userId);
 }

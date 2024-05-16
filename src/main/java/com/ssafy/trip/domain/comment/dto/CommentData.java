@@ -19,4 +19,13 @@ public class CommentData {
         private String createdAt;
         private String profileImage;
     }
+
+    @Data
+    public static class SimpleDetail {
+        private Long commentId;
+        private Long reviewId;
+        private String createdAt;
+        private String content;
+        private String simpleReviewContent;
+    }
 }

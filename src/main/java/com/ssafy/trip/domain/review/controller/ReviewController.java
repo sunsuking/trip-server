@@ -75,7 +75,12 @@ public class ReviewController {
 
     @GetMapping("/{userId}")
     public SuccessResponse<List<ReviewData.SimpleReview>> getReviews(@PathVariable("userId")Long userId) {
-        log.debug("{}", userId);
         return SuccessResponse.of(reviewService.getReviewsFindById(userId));
     }
+
+    @GetMapping("/like/{userId}")
+    public SuccessResponse<List<ReviewData.SimpleReview>> getLikedReviews(@PathVariable("userId")Long userId) {
+        return SuccessResponse.of(reviewService.getLikedReviews(userId));
+    }
 }
+

@@ -20,6 +20,8 @@ public interface ReviewMapper {
 
     List<ReviewWithUser> findAllById(Long userId);
 
+    List<ReviewWithUser> findLikedAllById(Long userId);
+
     int countReviews();
 
     Optional<ReviewWithUser> findById(long reviewId);
@@ -40,6 +42,5 @@ public interface ReviewMapper {
     void deleteLike(long reviewId, long userId);
 
     void saveImg(Long reviewId, String imgUrl);
-
 
 }

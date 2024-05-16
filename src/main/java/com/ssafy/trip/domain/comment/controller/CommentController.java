@@ -4,6 +4,7 @@ import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.comment.dto.CommentData;
 import com.ssafy.trip.domain.comment.dto.CommentData.Create;
 import com.ssafy.trip.domain.comment.dto.CommentData.Detail;
+import com.ssafy.trip.domain.comment.dto.CommentData.SimpleDetail;
 import com.ssafy.trip.domain.comment.entity.Comment;
 import com.ssafy.trip.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,11 @@ public class CommentController {
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<Detail>> listByUserId(@PathVariable("userId") Long userId) {
         return SuccessResponse.of(commentService.listByUserId(userId));
+    }
+
+    @GetMapping("/simple/{userId}")
+    public SuccessResponse<List<SimpleDetail>> simpleCommentListByUserId(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(commentService.simpleCommentListByUserId(userId));
     }
 
     @PostMapping

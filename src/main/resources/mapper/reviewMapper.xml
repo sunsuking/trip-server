@@ -52,6 +52,24 @@
         </foreach>
     </select>
 
+    <select id="findLikedAllById" resultMap="reviewWithUser">
+        SELECT r.review_id,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               r.like_count,
+               i.image
+        FROM review r
+             LEFT JOIN review_images i ON r.review_id = i.review_id
+             JOIN review_like rl ON rl.review_id = r.review_id
+             JOIN users u ON r.user_id = u.user_id
+        WHERE u.user_id = #{userId}
+        ORDER BY r.created_at DESC
+    </select>
+
     <select id="countReviews" resultType="int">
         SELECT COUNT(*)
         FROM review
@@ -85,8 +103,8 @@
                r.like_count,
                i.image
         FROM review r
-                 LEFT JOIN review_images i ON r.review_id = i.review_id
-                 JOIN users u ON r.user_id = u.user_id
+         LEFT JOIN review_images i ON r.review_id = i.review_id
+            JOIN users u ON r.user_id = u.user_id
         WHERE u.user_id = #{userId}
         ORDER BY r.created_at DESC
     </select>
