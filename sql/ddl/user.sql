@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS notices CASCADE;
 # 유저 테이블
 CREATE TABLE users
 (
@@ -17,15 +16,6 @@ CREATE TABLE users
     updated_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT users_email_unique UNIQUE (email),
     CONSTRAINT users_username_unique UNIQUE (username)
-);
-
-# 공지사항 테이블
-CREATE TABLE notices
-(
-    notice_id  INTEGER PRIMARY KEY AUTO_INCREMENT,
-    title      VARCHAR(255)                        NOT NULL,
-    content    TEXT                                NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE VIEW tour_with_address AS
