@@ -41,7 +41,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public SuccessResponse<UserData.LoginUser> me(@CurrentUser User user) {
         if (user == null) {
-            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+//            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
     }

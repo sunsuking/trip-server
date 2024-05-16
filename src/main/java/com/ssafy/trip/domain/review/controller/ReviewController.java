@@ -27,6 +27,13 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final S3UploadService s3UploadService;
 
+    /**
+     * 리뷰 목록 조회
+     *
+     * @param pageable {@link Pageable} 페이지 정보
+     * @param user     {@link User} 현재 사용자
+     * @return {@link ReviewData.SimpleReview} 리뷰 목록
+     */
     @GetMapping("")
     public SuccessResponse<CustomPage<ReviewData.SimpleReview>> getReviews(
             @PageableDefault(size = 12) Pageable pageable,
@@ -34,9 +41,32 @@ public class ReviewController {
     ) {
         Long userId = user == null ? 0 : user.getUserId();
         return SuccessResponse.of(reviewService.getReviews(pageable, userId));
-
     }
 
+    /**
+     * 리뷰 상세 조회
+     *
+     * @param reviewId 리뷰 ID
+     * @param user     {@link User} 현재 사용자
+     * @return {@link ReviewData.Review} 리뷰 상세 정보
+     */
+    @GetMapping("/{id}")
+    public SuccessResponse<ReviewData.Review> getReview(
+            @PathVariable("id") Long reviewId,
+            @CurrentUser User user
+    ) {
+        Long userId = user == null ? 0 : user.getUserId();
+        return SuccessResponse.of(reviewService.findById(reviewId, userId).orElse(null));
+    }
+
+    /**
+     * 리뷰 생성
+     *
+     * @param create {@link Create} 리뷰 생성 정보
+     * @param user   {@link User} 현재 사용자
+     * @param images {@link MultipartFile} 이미지 파일
+     * @return 응답
+     */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<Void> create(
@@ -45,6 +75,36 @@ public class ReviewController {
             @RequestParam("images") List<MultipartFile> images
     ) {
         reviewService.saveReview(create, user.getUserId(), images);
+        return SuccessResponse.empty();
+    }
+
+    /**
+     * 리뷰 댓글 조회
+     *
+     * @param reviewId 리뷰 ID
+     * @return {@link ReviewData.CommentResponse} 댓글 목록
+     */
+    @GetMapping("/{id}/comment")
+    public SuccessResponse<List<ReviewData.CommentResponse>> getComments(@PathVariable("id") Long reviewId) {
+        return SuccessResponse.of(reviewService.findByReviewId(reviewId));
+    }
+
+    /**
+     * 리뷰 댓글 생성
+     *
+     * @param reviewId 리뷰 ID
+     * @param create   {@link ReviewData.CommentCreate} 댓글 생성 정보
+     * @param user     {@link User} 현재 사용자
+     * @return 응답
+     */
+    @PostMapping("/{id}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SuccessResponse<Void> createComment(
+            @PathVariable("id") Long reviewId,
+            @RequestBody ReviewData.CommentCreate create,
+            @CurrentUser User user
+    ) {
+        reviewService.saveComment(reviewId, create, user.getUserId());
         return SuccessResponse.empty();
     }
 

@@ -7,16 +7,23 @@
         FROM tour_with_address;
     </select>
 
+    <select id="findCityById">
+        SELECT *
+        FROM city
+        WHERE city_code = #{cityId};
+    </select>
+
     <select id="findById">
         SELECT *
         FROM tour_with_address
         WHERE tour_id = #{tourId};
     </select>
 
-    <select id="findWithContentById">
+    <select id="findStayByCityId">
         SELECT *
         FROM tour_with_content
-        WHERE tour_id = #{tourId};
+        WHERE city_code = #{cityId}
+          AND content_type = 'STAY';
     </select>
 
     <select id="findWithContentByKeyword" resultType="com.ssafy.trip.domain.tour.entity.TourWithContent">
