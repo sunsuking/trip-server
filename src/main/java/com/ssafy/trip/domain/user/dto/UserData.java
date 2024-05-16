@@ -62,6 +62,7 @@ public class UserData {
         private String nickname;
         private int cityCode;
         private int townCode;
+        private boolean defaultImage;
     }
 
     @Data
