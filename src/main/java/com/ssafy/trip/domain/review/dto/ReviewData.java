@@ -16,6 +16,7 @@ public class ReviewData {
         private Long reviewId;
         private String content;
         private int tourId;
+        private int rating;
     }
 
     @Data

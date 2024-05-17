@@ -97,8 +97,8 @@
     </select>
 
     <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
-        INSERT INTO review(content, user_id, tour_id)
-        VALUES (#{create.content}, #{authorId}, #{create.tourId})
+        INSERT INTO review(content, user_id, tour_id, rating)
+        VALUES (#{create.content}, #{authorId}, #{create.tourId}, #{create.rating})
     </insert>
 
     <update id="updateReview">

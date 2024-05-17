@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS review
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     like_count INT      DEFAULT 0,
+    rating     INT CHECK (rating BETWEEN 1 AND 5),
     CONSTRAINT foreign_key_review_author FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
     CONSTRAINT foreign_key_review_tour_id FOREIGN KEY (tour_id) REFERENCES tour (tour_id) ON DELETE CASCADE
 );
