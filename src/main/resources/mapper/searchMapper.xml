@@ -4,18 +4,26 @@
     <!-- 여행 후기 조회   -->
     <select id="searchReviewsByKeyword">
         SELECT *
-        FROM review;
+        FROM review R
+        LEFT JOIN tour T ON R.tour_id = T.tour_id
+        WHERE R.content like concat('%', #{searchKeyword}, '%')
+        OR T.name like concat('%', #{searchKeyword}, '%')
+        OR T.address like concat('%', #{searchKeyword}, '%');
     </select>
 
     <!-- 공지사항 조회   -->
     <select id="searchNoticesByKeyword">
         SELECT *
-        FROM notices;
+        FROM notices N
+        WHERE N.content like concat('%', #{searchkeyword}, '%')
+        OR N.title like concat('%', #{searchkeyword}, '%');
     </select>
 
     <!-- 유저 조회   -->
     <select id="searchUsersByKeyword">
         SELECT *
-        FROM users;
+        FROM users U
+        WHERE U.nickname like concat('%', #{searchkeyword}, '%')
+        OR U.username like concat('%', #{searchkeyword}, '%');
     </select>
 </mapper>
