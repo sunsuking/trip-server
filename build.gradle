@@ -34,7 +34,6 @@ ext {
     set('sentryVersion', "7.3.0")
     springCloudVersion = "2023.0.1"
 }
-
 dependencies {
     // Spring Boot 기본
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -84,7 +83,11 @@ dependencies {
     // Spring Boot 테스트 컨테이너
     testImplementation 'org.testcontainers:postgresql'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
+
+    // OpenAI GPT-3
+    implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
 }
+
 
 dependencyManagement {
     imports {
