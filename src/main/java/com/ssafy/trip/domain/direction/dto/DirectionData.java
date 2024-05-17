@@ -1,8 +1,18 @@
 package com.ssafy.trip.domain.direction.dto;
 
+import com.ssafy.trip.domain.direction.entity.Vehicle;
 import lombok.Data;
 
 public class DirectionData {
+    @Data
+    public static class Mobility {
+        private Vehicle car;
+        private Vehicle walk;
+        private Vehicle bike;
+        private Vehicle bus;
+        private Vehicle metro;
+    }
+
     @Data
     public static class Request {
         private int startTourId;
