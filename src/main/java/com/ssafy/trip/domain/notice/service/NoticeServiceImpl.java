@@ -43,24 +43,22 @@ public class NoticeServiceImpl implements NoticeService {
         HashMap<String, String> imgUrlMap = new HashMap<>();
 
         // S3로 이미지 업로드
-        AtomicInteger atomicInteger = new AtomicInteger(0);
-        images.stream().map((image) -> {
-            CompletableFuture<String> future = s3UploadService.upload(image);
-            return future.join();
-        }).forEach((imgUrl) -> {
-            imgUrlMap.put("image-replace-key-" + atomicInteger.incrementAndGet(), imgUrl);
-        });
+        if (images != null && images.size() > 0) {
+            AtomicInteger atomicInteger = new AtomicInteger(0);
+            images.stream().map((image) -> {
+                CompletableFuture<String> future = s3UploadService.upload(image);
+                return future.join();
+            }).forEach((imgUrl) -> {
+                imgUrlMap.put("image-replace-key-" + atomicInteger.incrementAndGet(), imgUrl);
+            });
 
-//        for (String str : imgUrlMap.keySet()) {
-//            log.info("imgUrl:{}", str);
-//        }
-
-        // notice.content 에서 image-replace-key를 찾아내면 대체
-        String content = notice.getContent();
-        for (Map.Entry<String, String> entry : imgUrlMap.entrySet()) {
-            content = content.replace(entry.getKey(), entry.getValue());
+            // notice.content 에서 image-replace-key를 찾아내면 대체
+            String content = notice.getContent();
+            for (Map.Entry<String, String> entry : imgUrlMap.entrySet()) {
+                content = content.replace(entry.getKey(), entry.getValue());
+            }
+            notice.setContent(content);
         }
-        notice.setContent(content);
 
         noticeMapper.save(notice);
 

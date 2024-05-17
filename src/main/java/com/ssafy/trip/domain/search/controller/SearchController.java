@@ -2,6 +2,7 @@ package com.ssafy.trip.domain.search.controller;
 
 import com.ssafy.trip.domain.notice.entity.Notice;
 import com.ssafy.trip.domain.review.entity.Review;
+import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import com.ssafy.trip.domain.search.service.SearchService;
 import com.ssafy.trip.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class SearchController {
     @GetMapping("")
     public ResponseEntity<Map<String, List>> search(@RequestParam String searchKeyword) {
         // Review
-        List<Review> reviews = searchService.searchReviewsByKeyword(searchKeyword);
+        List<ReviewWithUser> reviews = searchService.searchReviewsByKeyword(searchKeyword);
         // Notice
         List<Notice> notices = searchService.searchNoticesByKeyword(searchKeyword);
         // User

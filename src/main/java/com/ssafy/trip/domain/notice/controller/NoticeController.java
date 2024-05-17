@@ -40,7 +40,7 @@ public class NoticeController {
     @PostMapping("/create")
     public ResponseEntity<Void> save(
             Notice noticeDto,
-            @RequestParam("images") List<MultipartFile> images
+            @RequestParam(value = "images", required = false) List<MultipartFile> images
         ) {
         System.out.println(noticeDto);
         System.out.println(images);
