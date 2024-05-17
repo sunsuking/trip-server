@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS notices CASCADE;
+
 # 유저 테이블
 CREATE TABLE users
 (
@@ -59,3 +61,40 @@ FROM tour T
          LEFT JOIN town O ON O.town_code = T.town_code AND O.city_code = T.city_code
          LEFT JOIN tour_detail TD ON T.tour_id = TD.tour_id
     );
+
+CREATE TABLE direction
+(
+    direction_id  INTEGER PRIMARY KEY AUTO_INCREMENT,
+    start_tour_id INTEGER NOT NULL,
+    end_tour_id   INTEGER NOT NULL
+);
+
+DROP TABLE IF EXISTS vehicle CASCADE;
+CREATE TABLE vehicle
+(
+    vehicle_id     INTEGER PRIMARY KEY AUTO_INCREMENT,
+    direction_id   INTEGER      NOT NULL,
+    fare           INTEGER      NOT NULL DEFAULT 0,
+    spent_time     INTEGER      NOT NULL DEFAULT 0,
+    walk_time      INTEGER      NOT NULL DEFAULT 0,
+    transfer_count INTEGER      NOT NULL DEFAULT 0,
+    distance       INTEGER      NOT NULL DEFAULT 0,
+    walk_distance  INTEGER      NOT NULL DEFAULT 0,
+    path           VARCHAR(255) NOT NULL,
+    CONSTRAINT vehicle_direction_id_fk FOREIGN KEY (direction_id) REFERENCES direction (direction_id)
+);
+
+DROP TABLE IF EXISTS step CASCADE;
+CREATE TABLE step
+(
+    step_id      INTEGER PRIMARY KEY AUTO_INCREMENT,
+    vehicle_id   INTEGER      NOT NULL,
+    mode         VARCHAR(255) NOT NULL,
+    start_name   VARCHAR(255) NOT NULL,
+    end_name     VARCHAR(255) NOT NULL,
+    section_time INTEGER      NULL,
+    distance     INTEGER      NOT NULL,
+    route_name   VARCHAR(255) NULL,
+    CONSTRAINT step_vehicle_id_fk FOREIGN KEY (vehicle_id) REFERENCES vehicle (vehicle_id)
+);
+

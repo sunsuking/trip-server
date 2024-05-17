@@ -1,11 +1,9 @@
 package com.ssafy.trip.domain.comment.controller;
 
 import com.ssafy.trip.core.response.SuccessResponse;
-import com.ssafy.trip.domain.comment.dto.CommentData;
 import com.ssafy.trip.domain.comment.dto.CommentData.Create;
 import com.ssafy.trip.domain.comment.dto.CommentData.Detail;
 import com.ssafy.trip.domain.comment.dto.CommentData.SimpleDetail;
-import com.ssafy.trip.domain.comment.entity.Comment;
 import com.ssafy.trip.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +36,7 @@ public class CommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SuccessResponse<Void> create(@RequestBody Create create){
+    public SuccessResponse<Void> create(@RequestBody Create create) {
         log.debug("{}", create);
         commentService.save(create);
         return SuccessResponse.empty();
@@ -46,7 +44,7 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public SuccessResponse<Void> delete(@PathVariable("commentId") Long commentId){
+    public SuccessResponse<Void> delete(@PathVariable("commentId") Long commentId) {
         return SuccessResponse.empty();
     }
 

@@ -5,6 +5,7 @@ import com.ssafy.trip.domain.tour.dto.TourData;
 import com.ssafy.trip.domain.tour.entity.Category;
 import com.ssafy.trip.domain.tour.entity.City;
 import com.ssafy.trip.domain.tour.entity.Town;
+import com.ssafy.trip.domain.tour.entity.City;
 import com.ssafy.trip.domain.tour.service.TourService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +34,22 @@ public class TourController {
         List<TourData.Search> tours = tourService.findTourByKeyword(city, query);
         return SuccessResponse.of(tours);
     }
-    
+
+    @GetMapping("/city/{cityId}")
+    public SuccessResponse<City> findCity(@PathVariable("cityId") int cityId) {
+        return SuccessResponse.of(tourService.findCityById(cityId));
+    }
+
     @GetMapping("/category")
     public SuccessResponse<List<Category>> categories() {
         return SuccessResponse.of(tourService.getCategories());
+    }
+
+    @GetMapping("/{cityId}/stay")
+    public SuccessResponse<List<TourData.Search>> getStay(
+            @PathVariable("cityId") int cityId
+    ) {
+        return SuccessResponse.of(tourService.findStayByCityId(cityId));
     }
 
     @GetMapping("/city")

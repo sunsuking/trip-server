@@ -14,7 +14,7 @@ import java.util.Optional;
 @Mapper
 public interface ReviewMapper {
     // SELECT
-    List<ReviewWithUser> findReviews(List<Long> reviewIds, long userId);
+    List<ReviewWithUser> findReviews(List<Long> reviewIds, Long userId);
 
     List<Long> findPagingIds(Pageable pageable);
 
@@ -24,7 +24,7 @@ public interface ReviewMapper {
 
     int countReviews();
 
-    Optional<ReviewWithUser> findById(long reviewId);
+    Optional<ReviewWithUser> findById(Long reviewId, Long userId);
 
     // INSERT
     Long saveReview(Create create, long authorId);
@@ -38,6 +38,8 @@ public interface ReviewMapper {
     boolean existsLikeByReviewIdAndUserId(long reviewId, long userId);
 
     void saveLike(long reviewId, long userId);
+
+    void updateLikeCount(Long reviewId, int count);
 
     void deleteLike(long reviewId, long userId);
 

@@ -2,10 +2,12 @@ package com.ssafy.trip.domain.review.service;
 
 import com.ssafy.trip.core.entity.CustomPage;
 import com.ssafy.trip.core.service.S3UploadService;
+import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
+import com.ssafy.trip.domain.review.mapper.ReviewCommentMapper;
 import com.ssafy.trip.domain.review.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
+    private final ReviewCommentMapper reviewCommentMapper;
     private final S3UploadService s3UploadService;
 
     @Override
@@ -41,8 +42,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<SimpleReview> findById(long reviewId) {
-        return reviewMapper.findById(reviewId).map(SimpleReview::of);
+    public Optional<ReviewData.Review> findById(Long reviewId, Long userId) {
+        return reviewMapper.findById(reviewId, userId).map(ReviewData.Review::of);
+    }
+
+    @Override
+    public List<ReviewData.CommentResponse> findByReviewId(Long reviewId) {
+        return reviewCommentMapper.findByReviewId(reviewId).stream().map(ReviewData.CommentResponse::of).toList();
     }
 
     @Override
@@ -59,8 +65,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public boolean existsLikeByReviewIdAndUserId(long reviewId, long userId) {
-        return reviewMapper.existsLikeByReviewIdAndUserId(reviewId, userId);
+    public void saveComment(Long reviewId, ReviewData.CommentCreate create, Long userId) {
+        reviewCommentMapper.save(reviewId, create.getContent(), userId);
     }
 
     @Override
@@ -75,14 +81,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void saveImg(Long reviewId, String[] imgUrls) {
-        Arrays.stream(imgUrls).forEach((imgUrl) -> reviewMapper.saveImg(reviewId, imgUrl));
-    }
-
-    @Override
-    @Transactional
     public void saveLike(long reviewId, long userId) {
         reviewMapper.saveLike(reviewId, userId);
+        reviewMapper.updateLikeCount(reviewId, 1);
     }
 
     @Override
@@ -101,6 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void deleteLike(long reviewId, long userId) {
         reviewMapper.deleteLike(reviewId, userId);
+        reviewMapper.updateLikeCount(reviewId, -1);
     }
 
 }
