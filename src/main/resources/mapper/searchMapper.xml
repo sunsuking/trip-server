@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.trip.domain.notice.mapper.searchMapper">
+<mapper namespace="com.ssafy.trip.domain.search.mapper.SearchMapper">
     <!-- 여행 후기 조회   -->
     <select id="searchReviewsByKeyword">
         SELECT *
-        FROM review
-        WHERE
+        FROM review;
     </select>
 
     <!-- 공지사항 조회   -->
     <select id="searchNoticesByKeyword">
         SELECT *
-        FROM notices
-        WHERE notice_id = #{noticeId};
+        FROM notices;
     </select>
 
     <!-- 유저 조회   -->
     <select id="searchUsersByKeyword">
         SELECT *
-        FROM users
+        FROM users;
     </select>
 </mapper>
