@@ -13,6 +13,9 @@ public interface UserMapper {
 
     List<User> findAll();
 
+    // 키워드로 회원 조회
+    List<User> findByKeyword(String keyword);
+
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);

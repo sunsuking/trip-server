@@ -49,6 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findByKeyword(String keyword) {
+        return userMapper.findByKeyword(keyword);
+    }
+
+    @Override
     public void updateIsLocked(Long userId) {
         userMapper.updateIsLocked(userId);
     }
@@ -62,4 +67,10 @@ public class UserServiceImpl implements UserService {
     public void delete(User user) {
         userMapper.delete(user.getUserId());
     }
+
+    @Override
+    public void drop(Long userId) {
+        userMapper.delete(userId);
+    }
+
 }

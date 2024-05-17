@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
     List<User> findAll();
 
+    // 키워드로 회원 조회
+    List<User> findByKeyword(String keyword);
+
     void updateIsLocked(Long userId);
 
     void update(Update update, MultipartFile profileImage, User user);
@@ -22,4 +25,7 @@ public interface UserService {
     void updatePassword(Password password, User user);
 
     void delete(User user);
+
+    // 회원 탈퇴
+    void drop(Long userId);
 }

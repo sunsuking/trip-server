@@ -5,16 +5,27 @@
         SELECT *
         FROM users;
     </select>
+
+    <select id="findByKeyword">
+        SELECT *
+        FROM users
+        WHERE users.username like concat('%', #{keyword}, '%')
+        OR users.email like concat('%', #{keyword}, '%')
+        OR users.nickname like concat('%', #{keyword}, '%');
+    </select>
+
     <select id="findByUsername">
         SELECT *
         FROM users
         WHERE username = #{username};
     </select>
+
     <select id="findByEmail">
         SELECT *
         FROM users
         WHERE email = #{email};
     </select>
+
     <select id="existsByUsername" resultType="boolean">
         SELECT COUNT(*)
         FROM users

@@ -53,6 +53,13 @@ public class UserController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // 특정 회원 조회
+    @GetMapping("")
+    public ResponseEntity<List<User>> getUserByKeyword(@RequestParam String keyword) {
+        List<User> list = userService.findByKeyword(keyword);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @PatchMapping("/update/{userId}")
     public ResponseEntity<Void> updateIsLocked(@PathVariable Long userId) {
         userService.updateIsLocked(userId);
@@ -98,5 +105,11 @@ public class UserController {
         response.addCookie(cookie);
         userService.delete(user);
         return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<Void> dropUser(@PathVariable Long userId) {
+        userService.drop(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
