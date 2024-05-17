@@ -61,7 +61,7 @@
                S.distance,
                S.route_name
         FROM vehicle V
-                 JOIN step S ON V.vehicle_id = S.vehicle_id
+                 LEFT JOIN step S ON V.vehicle_id = S.vehicle_id
         WHERE V.direction_id = #{directionId};
     </select>
 </mapper>
