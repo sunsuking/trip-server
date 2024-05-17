@@ -1,4 +1,4 @@
-package com.ssafy.trip.domain.chatbot;
+package com.ssafy.trip.domain.chatgpt;
 
 import lombok.Data;
 
@@ -6,6 +6,7 @@ public class MessageData {
 
     @Data
     public static class Message {
-        String message;
+        String location;
+        String content;
     }
 }
