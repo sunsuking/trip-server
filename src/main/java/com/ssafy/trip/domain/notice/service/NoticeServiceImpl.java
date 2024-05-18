@@ -38,6 +38,11 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    public List<Notice> findNoticesByKeyword(String keyword) {
+        return noticeMapper.findNoticesByKeyword(keyword);
+    }
+
+    @Override
     public void save(Notice notice, List<MultipartFile> images) {
 
         HashMap<String, String> imgUrlMap = new HashMap<>();

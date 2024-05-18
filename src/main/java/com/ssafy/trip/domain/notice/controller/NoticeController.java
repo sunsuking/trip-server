@@ -36,6 +36,13 @@ public class NoticeController {
         return new ResponseEntity<>(noticeService.findNoticeById(noticeId), HttpStatus.OK);
     }
 
+    // 특정 공지사항 조회
+    @GetMapping("")
+    public ResponseEntity<List<Notice>> findNoticeByKeyword(@RequestParam String keyword) {
+        List<Notice> list = noticeService.findNoticesByKeyword(keyword);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     // 공지사항 등록
     @PostMapping("/create")
     public ResponseEntity<Void> save(
