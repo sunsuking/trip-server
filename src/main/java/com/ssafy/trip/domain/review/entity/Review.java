@@ -11,6 +11,7 @@ public class Review {
     private boolean isLiked;
     private String address;
     private String content;
+    private String tourName;
     private int tourId;
     private int likeCount;
     private int rating;

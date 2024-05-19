@@ -65,8 +65,8 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         ChatGPTData.Request request = new ChatGPTData.Request();
         request.setPrompt(CHATBOT_PROMPT_TEMPLATE);
         request.setUserMessage(message.getUserRequest());
-
         String response = getChatRequest(request);
+
         message.setAiResponse(response);
         chatBotMapper.save(message, userId);
     }

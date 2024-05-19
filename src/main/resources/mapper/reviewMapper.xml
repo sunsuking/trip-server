@@ -11,6 +11,7 @@
         <id column="review_id" property="reviewId"/>
         <result column="is_liked" property="isLiked"/>
         <result column="content" property="content"/>
+        <result column="tour_name" property="tourName"/>
         <result column="tour_id" property="tourId"/>
         <result column="like_count" property="likeCount"/>
         <result column="rating" property="rating"/>
@@ -33,6 +34,7 @@
     <select id="findReviews" resultMap="reviewWithUser">
         SELECT R.review_id,
         R.content,
+        T.name as tour_name,
         R.tour_id,
         R.created_at,
         R.updated_at,
@@ -81,6 +83,7 @@
     <select id="findById" resultMap="reviewWithUser">
         SELECT R.review_id,
                R.content,
+               T.name as tour_name,
                R.tour_id,
                R.created_at,
                R.updated_at,
