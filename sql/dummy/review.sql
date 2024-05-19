@@ -36,7 +36,7 @@ VALUES ('정말 멋진 투어였어요! 추천합니다.', 2, 125405),
        ('너무 재미있었습니다! 다음에 또 참여하고 싶어요.', 2, 125420),
        ('다시 경험하고 싶은 여행이었습니다.', 2, 125421);
 
-INSERT INTO review_images (review_id, image)
+INSERT INTO review_images (review_images.review_id, review_images.image)
 VALUES (3, 'https://placehold.co/600x400'),
        (3, 'https://placehold.co/600x401'),
        (3, 'https://placehold.co/600x402'),
