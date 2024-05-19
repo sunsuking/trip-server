@@ -1,8 +1,16 @@
 package com.ssafy.trip.domain.chatgpt.service;
 
-import com.ssafy.trip.domain.chatgpt.MessageData;
+import com.ssafy.trip.domain.chatgpt.dto.ChatGPTData;
+
+import java.util.List;
 
 public interface ChatGPTService {
 
-    String getResponse(MessageData.Message message);
+    String getRecommend(ChatGPTData.Recommend recommend);
+
+    void sendMessage(ChatGPTData.Message message, Long userId);
+
+    List<ChatGPTData.Message> getList(Long userId);
+
+    void deleteChat(Long userId);
 }

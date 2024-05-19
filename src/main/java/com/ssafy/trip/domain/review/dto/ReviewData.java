@@ -57,6 +57,7 @@ public class ReviewData {
         private String content;
         private int tourId;
         private int likeCount;
+        private int rating;
         private String createdAt;
         private SimpleUser user;
         private String updatedAt;
@@ -70,6 +71,7 @@ public class ReviewData {
             reviewResponse.setAddress(review.getAddress());
             reviewResponse.setTourId(review.getTourId());
             reviewResponse.setLikeCount(review.getLikeCount());
+            reviewResponse.setRating(review.getRating());
             reviewResponse.setCreatedAt(review.getCreatedAt().toString());
             reviewResponse.setUser(review.getUser());
             reviewResponse.setUpdatedAt(review.getUpdatedAt().toString());
@@ -85,6 +87,7 @@ public class ReviewData {
         private String content;
         @JsonProperty("isLiked")
         private boolean isLiked;
+        private int rating;
         private int tourId;
         private String createdAt;
         private List<String> images;
@@ -95,6 +98,7 @@ public class ReviewData {
             simpleReview.setReviewId(review.getReviewId());
             simpleReview.setContent(review.getContent());
             simpleReview.setLiked(review.isLiked());
+            simpleReview.setRating(review.getRating());
             simpleReview.setAddress(review.getAddress());
             simpleReview.setTourId(review.getTourId());
             simpleReview.setCreatedAt(review.getCreatedAt().toString());

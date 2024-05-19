@@ -6,12 +6,14 @@
         <result column="nickname" property="nickname"/>
         <result column="profile_image" property="profileImage"/>
     </resultMap>
+
     <resultMap id="reviewWithUser" type="com.ssafy.trip.domain.review.entity.ReviewWithUser">
         <id column="review_id" property="reviewId"/>
         <result column="is_liked" property="isLiked"/>
         <result column="content" property="content"/>
         <result column="tour_id" property="tourId"/>
         <result column="like_count" property="likeCount"/>
+        <result column="rating" property="rating"/>
         <result column="address" property="address"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
@@ -36,6 +38,7 @@
         R.updated_at,
         I.image,
         R.like_count,
+        R.rating,
         U.user_id,
         U.nickname,
         U.profile_image,
@@ -81,6 +84,7 @@
                R.tour_id,
                R.created_at,
                R.updated_at,
+               R.rating,
                I.image,
                R.like_count,
                U.user_id,

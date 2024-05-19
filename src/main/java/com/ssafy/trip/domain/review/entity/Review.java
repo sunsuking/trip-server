@@ -13,6 +13,7 @@ public class Review {
     private String content;
     private int tourId;
     private int likeCount;
+    private int rating;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> images;
