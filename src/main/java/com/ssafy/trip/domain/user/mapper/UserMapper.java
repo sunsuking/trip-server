@@ -1,7 +1,5 @@
 package com.ssafy.trip.domain.user.mapper;
 
-import com.ssafy.trip.domain.user.dto.UserData;
-import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,6 +12,8 @@ public interface UserMapper {
     List<User> findAll();
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> findById(Long userId);
 
     Optional<User> findByEmail(String email);
 

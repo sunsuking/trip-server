@@ -133,13 +133,13 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @GetMapping("/{userId}")
-    public SuccessResponse<List<ReviewData.SimpleReview>> getReviews(@PathVariable("userId")Long userId) {
-        return SuccessResponse.of(reviewService.getReviewsFindById(userId));
-    }
+//    @GetMapping("/{userId}")
+//    public SuccessResponse<List<ReviewData.SimpleReview>> getReviews(@PathVariable("userId")Long userId) {
+//        return SuccessResponse.of(reviewService.getReviewsFindById(userId));
+//    }
 
     @GetMapping("/like/{userId}")
-    public SuccessResponse<List<ReviewData.SimpleReview>> getLikedReviews(@PathVariable("userId")Long userId) {
+    public SuccessResponse<List<ReviewData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
         return SuccessResponse.of(reviewService.getLikedReviews(userId));
     }
 }

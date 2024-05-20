@@ -7,25 +7,20 @@ import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.auth.service.AuthService;
 import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
+import com.ssafy.trip.domain.user.dto.UserData.Profile;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +40,12 @@ public class UserController {
 //            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
+    }
+
+    @GetMapping("/{userId}")
+    public SuccessResponse<Profile> getUser(@PathVariable Long userId) {
+        Profile profile = userService.getProfile(userId);
+        return SuccessResponse.of(profile);
     }
 
     @GetMapping("/list")
