@@ -24,6 +24,14 @@ CREATE TABLE users
     CONSTRAINT users_town_code_fk FOREIGN KEY (town_code) REFERENCES town (town_code)
 );
 
+CREATE TABLE follow (
+    follower_id INTEGER NOT NULL,
+    followee_id   INTEGER NOT NULL,
+    PRIMARY KEY (followee_id,follower_id),
+    CONSTRAINT  fw_follower FOREIGN KEY (follower_id) REFERENCES users(user_id) ON DELETE CASCADE ,
+    CONSTRAINT  fw_followee FOREIGN KEY (followee_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
 CREATE VIEW tour_with_address AS
 (
 SELECT T.tour_id,

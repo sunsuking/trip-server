@@ -1,9 +1,9 @@
 package com.ssafy.trip.domain.user.service;
 
 
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
 import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
 import com.ssafy.trip.domain.user.entity.User;
 
 import java.util.List;
@@ -30,4 +30,16 @@ public interface UserService {
     List<UserData.SimpleReview> getLikedReviewsById(Long userId);
 
     UserData.SimpleProfile findById(Long userId);
+
+    void followUser(Long followeeId, Long userId);
+
+    void unFollowUser(Long followeeId, Long userId);
+
+    List<SimpleUser> getFollows(Long userId);
+
+    List<SimpleUser> getFollowers(Long userId);
+
+    int getFollowCount(Long userId);
+
+    int getFollowingCount(Long userId);
 }

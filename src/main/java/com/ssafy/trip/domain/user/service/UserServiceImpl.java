@@ -1,9 +1,12 @@
 package com.ssafy.trip.domain.user.service;
 
+import com.ssafy.trip.core.exception.CustomException;
+import com.ssafy.trip.core.exception.ErrorCode;
 import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
@@ -82,5 +85,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserData.SimpleProfile findById(Long userId) {
         return userMapper.findById(userId);
+    }
+
+    @Override
+    public void followUser(Long followeeId, Long followId) {
+        if(userMapper.isFollow(followeeId,followId)){
+            throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
+        }
+        userMapper.follow(followeeId, followId);
+    }
+
+    @Override
+    public void unFollowUser(Long followeeId, Long followId) {
+        if (!userMapper.isFollow(followeeId, followId)) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+        userMapper.unFollow(followeeId, followId);
+    }
+
+    @Override
+    public List<SimpleUser> getFollows(Long userId) {
+        return userMapper.getFollows(userId);
+    }
+
+    @Override
+    public List<SimpleUser> getFollowers(Long userId) {
+        return userMapper.getFollowers(userId);
+    }
+
+    @Override
+    public int getFollowCount(Long userId) {
+        return userMapper.getFollowCount(userId);
+    }
+
+    @Override
+    public int getFollowingCount(Long userId) {
+        return userMapper.getFollowingCount(userId);
     }
 }

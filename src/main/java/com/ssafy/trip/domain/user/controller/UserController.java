@@ -11,6 +11,7 @@ import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
 import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -114,5 +115,45 @@ public class UserController {
     @GetMapping("/{userId}/likes")
     public SuccessResponse<List<UserData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
         return SuccessResponse.of(userService.getLikedReviewsById(userId));
+    }
+
+    @PostMapping("/{userId}/follow")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SuccessResponse<Void> followUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.followUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{userId}/unfollow")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> unfollowUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.unFollowUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    // 자신이 팔로우하는 유저리스트
+    @GetMapping("/{userId}/follow")
+    public SuccessResponse<List<SimpleUser>> getFollows(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollows(userId));
+    }
+
+    // 자신을 팔로우하는 유저리스트
+    @GetMapping("/{userId}/following")
+    public SuccessResponse<List<SimpleUser>> getFollowers(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowers(userId));
+    }
+
+    @GetMapping("/{userId}/followerCount")
+    public SuccessResponse<Integer> getFollowCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowCount(userId));
+    }
+
+    @GetMapping("/{userId}/followingCount")
+    public SuccessResponse<Integer> getFollowingCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowingCount(userId));
     }
 }
