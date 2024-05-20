@@ -52,6 +52,14 @@
     <select id="findTowns">
         SELECT town_code, name
         FROM town
-        WHERE city_code = #{cityCode}
+        WHERE city_code = #{cityCode};
     </select>
+
+    <select id="findTourById">
+        SELECT *
+        FROM tour
+        WHERE tour_id = #{tourId};
+    </select>
+
+
 </mapper>

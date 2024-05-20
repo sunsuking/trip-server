@@ -1,5 +1,7 @@
 package com.ssafy.trip.domain.home.service;
 
+import com.ssafy.trip.domain.home.dto.HomeData;
+import com.ssafy.trip.domain.home.dto.HomeData.NumberData;
 import com.ssafy.trip.domain.home.mapper.HomeMapper;
 import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.tour.entity.Tour;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ssafy.trip.domain.home.dto.HomeData.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,37 +22,27 @@ public class HomeServiceImpl implements HomeService{
     public final HomeMapper homeMapper;
 
     @Override
-    public Long getTotalNumberOfReviews() {
-        return homeMapper.getTotalNumberOfReviews();
+    public Optional<NumberData> getTotalNumbers() {
+        return homeMapper.getTotalNumbers();
     }
 
     @Override
-    public Long getTotalNumberOfNotices() {
-        return homeMapper.getTotalNumberOfNotices();
-    }
-
-    @Override
-    public Long getTotalNumberOfUsers() {
-        return homeMapper.getTotalNumberOfUsers();
-    }
-
-    @Override
-    public Long getTotalNumberOftours() {
-        return homeMapper.getTotalNumberOftours();
-    }
-
-    @Override
-    public Long getTotalNumberOfPlans() {
-        return homeMapper.getTotalNumberOfPlans();
-    }
-
-    @Override
-    public List<Tour> getTopTours() {
+    public List<TopTour> getTopTours() {
         return homeMapper.getTopTours();
     }
 
     @Override
-    public List<Review> getTopReviews() {
+    public List<TopReview> getTopReviews() {
         return homeMapper.getTopReviews();
+    }
+
+    @Override
+    public TourInfo getTopTourInfos(Long tourId) {
+        return homeMapper.getTopTourInfos(tourId);
+    }
+
+    @Override
+    public ReviewInfo getTopReviewInfos(Long reviewId) {
+        return homeMapper.getTopReviewInfos(reviewId);
     }
 }
