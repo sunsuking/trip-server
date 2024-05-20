@@ -3,7 +3,6 @@ package com.ssafy.trip.domain.review.controller;
 import com.ssafy.trip.core.annotation.CurrentUser;
 import com.ssafy.trip.core.entity.CustomPage;
 import com.ssafy.trip.core.response.SuccessResponse;
-import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
@@ -142,8 +141,13 @@ public class ReviewController {
 
     @PatchMapping("/{id}/comment")
     public SuccessResponse<Void> updateComment(@PathVariable("id") Long commentId, @RequestBody ReviewData.UpdateComment update) {
-        reviewService.updateComment(commentId,update);
+        reviewService.updateComment(commentId, update);
         return SuccessResponse.empty();
+    }
+
+    @GetMapping("/like/{userId}")
+    public SuccessResponse<List<ReviewData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(reviewService.getLikedReviews(userId));
     }
 }
 

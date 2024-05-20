@@ -1,13 +1,11 @@
 package com.ssafy.trip.domain.user.service;
 
-import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
-import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
-import com.ssafy.trip.domain.review.entity.ReviewWithUser;
-import com.ssafy.trip.domain.user.dto.UserData;
-import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.core.service.S3UploadService;
+import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
+import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
+import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static com.ssafy.trip.domain.user.dto.UserData.Profile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,6 +44,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userMapper.findAll();
+    }
+
+    @Override
+    public Profile getProfile(Long userId) {
+//        User user = userMapper.findById(userId);
+//        return Profile.of(user);
+        return null;
     }
 
     @Override
@@ -82,11 +87,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserData.SimpleReview> getLikedReviewsById(Long userId) {
         return userMapper.getLikedReviewsById(userId);
-    }
-
-    @Override
-    public UserData.SimpleProfile findById(Long userId) {
-        return userMapper.findById(userId);
     }
 
     @Override
