@@ -34,7 +34,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public CustomPage<SimpleReview> getReviews(Pageable pageable, Long userId) {
         List<Long> pagingIds = reviewMapper.findPagingIds(pageable);
-        System.out.println(pagingIds);
         List<ReviewWithUser> reviews = reviewMapper.findReviews(pagingIds, userId);
         int count = reviewMapper.countReviews();
         Page<SimpleReview> pageReviews = new PageImpl<>(reviews.stream().map(SimpleReview::of).toList(), pageable, count);
@@ -52,13 +51,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<SimpleReview> getReviewsFindById(Long userId) {
-        List<ReviewWithUser> allById = reviewMapper.findAllById(userId);
-        return allById.stream().map(SimpleReview::of).collect(Collectors.toList());
-    }
-
-
-    @Override
     public List<SimpleReview> getLikedReviews(Long userId) {
         List<ReviewWithUser> LikedAllById = reviewMapper.findLikedAllById(userId);
         return LikedAllById.stream().map(SimpleReview::of).collect(Collectors.toList());
@@ -67,6 +59,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void saveComment(Long reviewId, ReviewData.CommentCreate create, Long userId) {
         reviewCommentMapper.save(reviewId, create.getContent(), userId);
+    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        reviewCommentMapper.delete(commentId);
+    }
+
+    @Override
+    public void updateComment(Long commentId, ReviewData.UpdateComment update) {
+        reviewCommentMapper.update(commentId, update);
     }
 
     @Override

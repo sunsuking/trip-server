@@ -17,22 +17,23 @@ public interface ReviewService {
 
     Optional<ReviewData.Review> findById(Long reviewId, Long userId);
 
-    List<SimpleReview> getReviewsFindById(Long userId);
-
     List<ReviewData.CommentResponse> findByReviewId(Long reviewId);
 
-    void saveComment(Long reviewId, CommentCreate create, Long userId);
-
-    void saveReview(Create create, Long userId, List<MultipartFile> images);
-
-
-    void saveLike(long reviewId, long userId);
+    List<SimpleReview> getLikedReviews(Long userId);
 
     void updateReview(Update update);
 
     void deleteReview(long reviewId);
 
+    void saveReview(Create create, Long userId, List<MultipartFile> images);
+
+    void saveLike(long reviewId, long userId);
+
     void deleteLike(long reviewId, long userId);
 
-    List<SimpleReview> getLikedReviews(Long userId);
+    void saveComment(Long reviewId, CommentCreate create, Long userId);
+
+    void deleteComment(Long commentId);
+
+    void updateComment(Long commentId, ReviewData.UpdateComment update);
 }

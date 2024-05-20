@@ -18,8 +18,6 @@ public interface ReviewMapper {
 
     List<Long> findPagingIds(Pageable pageable);
 
-    List<ReviewWithUser> findAllById(Long userId);
-
     List<ReviewWithUser> findLikedAllById(Long userId);
 
     int countReviews();

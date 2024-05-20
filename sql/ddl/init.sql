@@ -103,3 +103,5 @@ create table trip
 
 SHOW TABLES;
 SET foreign_key_checks = 1;
+
+SELECT * FROM tour WHERE name = "풍암";

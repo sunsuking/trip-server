@@ -32,6 +32,14 @@
         WHERE username = #{username};
     </select>
 
+    <select id="commentsByUserId">
+        SELECT c.comment_id, c.review_id, c.created_at, c.content, r.content as ReviewContent
+        FROM review_comment c
+                 JOIN users u ON c.user_id = u.user_id
+                 JOIN review r ON c.review_id = r.review_id
+        WHERE c.user_id = #{userId}
+    </select>
+
     <insert id="save">
         INSERT INTO users (username, email, password, nickname, profile_image, provider_type, role_type)
         VALUES (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{providerType}, #{roleType});
@@ -70,4 +78,52 @@
         WHERE user_id = #{userId}
     </delete>
 
+
+    <resultMap id="simpleReview" type="com.ssafy.trip.domain.user.dto.UserData$SimpleReview">
+        <id column="review_id" property="reviewId"/>
+        <result column="content" property="content"/>
+        <result column="created_at" property="createdAt"/>
+        <collection property="images" ofType="String" javaType="ArrayList">
+            <result column="image" property="imgUrl"/>
+        </collection>
+    </resultMap>
+
+    <select id="getReviewsById" resultMap="simpleReview">
+        SELECT r.review_id,
+               r.content,
+               r.created_at,
+               i.image
+        FROM review r
+                 LEFT JOIN review_images i ON r.review_id = i.review_id
+                 JOIN users u ON r.user_id = u.user_id
+        WHERE u.user_id = #{userId}
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="getLikedReviewsById" resultMap="simpleReview">
+        SELECT r.review_id,
+               r.content,
+               r.created_at,
+               i.image
+        FROM review r
+            JOIN review_like rl ON r.review_id = rl.review_id
+            LEFT JOIN review_images i ON r.review_id = i.review_id
+            JOIN users u ON r.user_id = u.user_id
+        WHERE rl.user_id = #{userId}
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="findById" >
+        SELECT
+            user_id,
+            email,
+            nickname,
+            profile_image,
+            IFNULL(c.name,'정보없음') as city,
+            IFNULL(t.name,'정보없음') as town
+        FROM users u
+                 LEFT JOIN town t ON u.town_code = t.town_code AND u.city_code = t.city_code
+                 LEFT JOIN city c ON t.city_code = c.city_code
+        WHERE user_id = ${userId}
+    </select>
 </mapper>
