@@ -25,7 +25,7 @@
     </resultMap>
 
     <insert id="saveBulkScheduleTrip">
-        INSERT INTO schedule_trip (schedule_id, tour_id, day, `order`, is_room)
+        INSERT INTO schedule_trip (schedule_id, tour_id, day, `order`, room)
         VALUES
         <foreach collection="scheduleTrips" item="scheduleTrip" separator=",">
             (#{scheduleTrip.scheduleId}, #{scheduleTrip.tourId}, #{scheduleTrip.day}, #{scheduleTrip.order},

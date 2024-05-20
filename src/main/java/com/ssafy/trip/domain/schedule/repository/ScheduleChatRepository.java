@@ -30,6 +30,7 @@ public class ScheduleChatRepository {
     public List<Chat> findAll(Long scheduleId) {
         Set<Chat> range = opsZSetChat.range(SCHEDULE_CHATS + scheduleId, 0, -1);
         if (Objects.isNull(range)) {
+            // TODO: RDBMS 에서 긁어오기
             return List.of();
         }
         return range.stream().toList();

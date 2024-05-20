@@ -19,9 +19,7 @@ services:
     image: redis:5.0.7-alpine
     ports:
       - "6379:6379"
-    environment:
-      - REDIS_DATABASES=1
-      - REDIS_MAXMEMORY=128mb
+    command: '--requirepass ssafy --maxmemory 128mb'
     volumes:
       - redis_data:/data
 

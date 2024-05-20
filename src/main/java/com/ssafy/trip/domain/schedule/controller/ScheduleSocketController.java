@@ -40,7 +40,6 @@ public class ScheduleSocketController {
             @DestinationVariable("scheduleId") Long scheduleId,
             TripAndVehicle tripAndVehicle
     ) {
-        System.out.println(tripAndVehicle.getVehicles());
         tripService.updateTripAndVehicle(tripAndVehicle);
         schedulePublisher.publish(tripAndVehicle);
     }
