@@ -45,7 +45,7 @@ public class ReviewData {
     public static class Update {
         private String content;
         private int tourId;
-        private Long reviewId;
+        private int rating;
     }
 
     @Data

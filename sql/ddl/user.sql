@@ -10,6 +10,8 @@ CREATE TABLE users
     password          VARCHAR(255)                                                                   NOT NULL,
     nickname          VARCHAR(255)                                                                   NULL,
     profile_image     VARCHAR(500)                                                                   NULL,
+    city_code         int                                                                            NULL,
+    town_code         int                                                                            NULL,
     provider_type     enum ('LOCAL', 'GOOGLE', 'GITHUB', 'KAKAO', 'NAVER') DEFAULT 'LOCAL'           NOT NULL,
     role_type         enum ('USER', 'ADMIN')                               DEFAULT 'USER'            NOT NULL,
     is_email_verified BOOLEAN                                              DEFAULT FALSE             NOT NULL,
@@ -17,7 +19,9 @@ CREATE TABLE users
     created_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT users_email_unique UNIQUE (email),
-    CONSTRAINT users_username_unique UNIQUE (username)
+    CONSTRAINT users_username_unique UNIQUE (username),
+    CONSTRAINT users_city_code_fk FOREIGN KEY (city_code) REFERENCES city (city_code),
+    CONSTRAINT users_town_code_fk FOREIGN KEY (town_code) REFERENCES town (town_code)
 );
 
 CREATE VIEW tour_with_address AS

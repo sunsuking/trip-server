@@ -21,7 +21,7 @@ public interface ReviewService {
 
     List<SimpleReview> getLikedReviews(Long userId);
 
-    void updateReview(Update update);
+    void updateReview(Long userId, Long reviewId, Update update, List<MultipartFile> images, List<String> removeImages);
 
     void deleteReview(long reviewId);
 
@@ -31,9 +31,12 @@ public interface ReviewService {
 
     void deleteLike(long reviewId, long userId);
 
+
     void saveComment(Long reviewId, CommentCreate create, Long userId);
 
     void deleteComment(Long commentId);
 
     void updateComment(Long commentId, ReviewData.UpdateComment update);
+
+
 }

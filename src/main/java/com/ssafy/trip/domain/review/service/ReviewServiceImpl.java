@@ -58,6 +58,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public void updateReview(Long userId,Long reviewId, Update update, List<MultipartFile> images, List<String> removeImages) {
+        // 사용하지 않는 기존 이미지 제거
+        removeImages.forEach(imgUrl -> {
+            reviewMapper.deleteImg(reviewId,imgUrl);// db
+            s3UploadService.deleteImageFromS3(imgUrl);// s3
+        });
+
+        // 새로 들어온 이미지 추가
+        images.stream().map((image) -> s3UploadService.upload(image).join())
+                .forEach((imgUrl) -> reviewMapper.saveImg(reviewId, imgUrl));
+
+        // 정보 업데이트
+        reviewMapper.updateReview(reviewId, update);
+    }
+
+    @Override
     public void saveComment(Long reviewId, ReviewData.CommentCreate create, Long userId) {
         reviewCommentMapper.save(reviewId, create.getContent(), userId);
     }
@@ -89,15 +105,11 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.updateLikeCount(reviewId, 1);
     }
 
-    @Override
-    @Transactional
-    public void updateReview(Update update) {
-        reviewMapper.updateReview(update);
-    }
 
     @Override
     @Transactional
     public void deleteReview(long reviewId) {
+        reviewMapper.getImg(reviewId).forEach(img -> s3UploadService.deleteImageFromS3(img));
         reviewMapper.deleteReview(reviewId);
     }
 

@@ -78,9 +78,15 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @PutMapping
-    public SuccessResponse<Void> update(@RequestBody Update update) {
-        reviewService.updateReview(update);
+    @PatchMapping("/{id}")
+    public SuccessResponse<Void> update(
+            Update update,
+            @PathVariable("id") Long reviewId,
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam("removeImages") List<String> removeImages,
+            @CurrentUser User user
+    ) {
+        reviewService.updateReview(user.getUserId(), reviewId, update, images, removeImages);
         return SuccessResponse.empty();
     }
 
@@ -142,7 +148,7 @@ public class ReviewController {
 
     @PatchMapping("/{id}/comment")
     public SuccessResponse<Void> updateComment(@PathVariable("id") Long commentId, @RequestBody ReviewData.UpdateComment update) {
-        reviewService.updateComment(commentId,update);
+        reviewService.updateComment(commentId, update);
         return SuccessResponse.empty();
     }
 }
