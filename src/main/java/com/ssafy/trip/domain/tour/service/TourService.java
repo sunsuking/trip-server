@@ -1,9 +1,7 @@
 package com.ssafy.trip.domain.tour.service;
 
 import com.ssafy.trip.domain.tour.dto.TourData;
-import com.ssafy.trip.domain.tour.entity.Category;
-import com.ssafy.trip.domain.tour.entity.City;
-import com.ssafy.trip.domain.tour.entity.Town;
+import com.ssafy.trip.domain.tour.entity.*;
 import com.ssafy.trip.domain.tour.entity.City;
 
 import java.util.List;
@@ -20,4 +18,7 @@ public interface TourService {
     City findCityById(int cityId);
 
     List<TourData.Search> findStayByCityId(int cityId);
+
+    // 여행지 조회 -> home에서 사용
+    Tour findTourById(Long tourId);
 }

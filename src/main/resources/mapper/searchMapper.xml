@@ -50,7 +50,7 @@
     <!-- 공지사항 조회   -->
     <select id="searchNoticesByKeyword">
         SELECT *
-        FROM notices N
+        FROM notice N
         WHERE N.content like concat('%', #{searchkeyword}, '%')
         OR N.title like concat('%', #{searchkeyword}, '%');
     </select>

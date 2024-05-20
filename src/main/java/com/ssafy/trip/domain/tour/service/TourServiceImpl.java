@@ -3,9 +3,7 @@ package com.ssafy.trip.domain.tour.service;
 import com.ssafy.trip.core.exception.CustomException;
 import com.ssafy.trip.core.exception.ErrorCode;
 import com.ssafy.trip.domain.tour.dto.TourData;
-import com.ssafy.trip.domain.tour.entity.Category;
-import com.ssafy.trip.domain.tour.entity.City;
-import com.ssafy.trip.domain.tour.entity.Town;
+import com.ssafy.trip.domain.tour.entity.*;
 import com.ssafy.trip.domain.tour.entity.City;
 import com.ssafy.trip.domain.tour.mapper.TourMapper;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +48,10 @@ public class TourServiceImpl implements TourService {
     @Override
     public List<TourData.Search> findStayByCityId(int cityId) {
         return tourMapper.findStayByCityId(cityId).stream().map(TourData.Search::of).toList();
+    }
+
+    @Override
+    public Tour findTourById(Long tourId) {
+        return tourMapper.findTourById(tourId);
     }
 }

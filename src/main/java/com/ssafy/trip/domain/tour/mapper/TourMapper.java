@@ -27,4 +27,7 @@ public interface TourMapper {
     List<City> findCities();
 
     List<Town> findTowns(int cityCode);
+
+    // 여행지 조회 -> home에서 사용
+    Tour findTourById(Long tourId);
 }
