@@ -117,6 +117,14 @@ public class UserController {
         return SuccessResponse.of(userService.getLikedReviewsById(userId));
     }
 
+
+    @GetMapping("/{userId}/check")
+    public SuccessResponse<Boolean> isFollow(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.isFollow(followeeId,user.getUserId()));
+    }
+
     @PostMapping("/{userId}/follow")
     @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<Void> followUser(
@@ -156,4 +164,5 @@ public class UserController {
     public SuccessResponse<Integer> getFollowingCount(@PathVariable("userId") Long userId){
         return SuccessResponse.of(userService.getFollowingCount(userId));
     }
+
 }

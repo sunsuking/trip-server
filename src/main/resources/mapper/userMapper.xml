@@ -122,7 +122,7 @@
 
     <!-- 팔로잉,팔로워 -->
     <select id="isFollow" resultType="boolean">
-        SELECT *
+        SELECT count(*)
         FROM follow
         WHERE followee_id=#{followeeId} AND follower_id=#{followerId}
     </select>

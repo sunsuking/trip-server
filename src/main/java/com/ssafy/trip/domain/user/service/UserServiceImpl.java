@@ -88,19 +88,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void followUser(Long followeeId, Long followId) {
-        if(userMapper.isFollow(followeeId,followId)){
-            throw new CustomException(ErrorCode.USER_ALREADY_EXISTS);
-        }
-        userMapper.follow(followeeId, followId);
+    public boolean isFollow(Long followeeId, Long followerId) {
+        return userMapper.isFollow(followeeId,followerId);
     }
 
     @Override
-    public void unFollowUser(Long followeeId, Long followId) {
-        if (!userMapper.isFollow(followeeId, followId)) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
-        userMapper.unFollow(followeeId, followId);
+    public void followUser(Long followeeId, Long followerId) {
+        userMapper.follow(followeeId, followerId);
+    }
+
+    @Override
+    public void unFollowUser(Long followeeId, Long followerId) {
+        userMapper.unFollow(followeeId, followerId);
     }
 
     @Override

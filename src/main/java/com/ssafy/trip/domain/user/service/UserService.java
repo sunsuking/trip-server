@@ -31,9 +31,11 @@ public interface UserService {
 
     UserData.SimpleProfile findById(Long userId);
 
-    void followUser(Long followeeId, Long userId);
+    boolean isFollow(Long followeeId, Long followerId);
 
-    void unFollowUser(Long followeeId, Long userId);
+    void followUser(Long followeeId, Long followerId);
+
+    void unFollowUser(Long followeeId, Long followerId);
 
     List<SimpleUser> getFollows(Long userId);
 
@@ -42,4 +44,6 @@ public interface UserService {
     int getFollowCount(Long userId);
 
     int getFollowingCount(Long userId);
+
+
 }
