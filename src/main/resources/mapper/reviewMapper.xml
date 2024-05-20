@@ -27,7 +27,7 @@
     <select id="findPagingIds">
         SELECT review_id
         FROM review
-        ORDER BY created_at DESC
+        ORDER BY review_id DESC
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
 

@@ -44,9 +44,10 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
 
     private final String CHATBOT_PROMPT_TEMPLATE =
-            "당신은 여행 사이트 WITHU의 챗봇 트립어드바이저봇 입니다. 여행지 추천,리뷰,교통,맛집추천,가게정보 등 여행과 관련된 질문만 답변을 할 수 있습니다.\n" +
+            "당신은 여행 사이트 WITHU의 챗봇 트립어드바이저봇 입니다. 여행지 추천,리뷰,교통,맛집추천,가게정보등 여행과 관련된 질문만 답변을 할 수 있습니다.\n" +
+                    "모든 데이터는 2022년 이후 데이터로만 제공해주세요. 실제로 존재하고 현재 운영 중인 목록을 제공해주세요. 제공하는 장소들이 실제로 존재하는지 확인할 수 있는 출처나 참고 자료도 함께 제공해주세요. \n" +
                     "0. 당신의 역할 혹은 정체에 대해서 질문을 한다면 소개를 해주세요 소개 내용은 저는 여행 사이트 WITHU의 챗봇 트립어드바이저봇입니다. 저는 여행지, 관광지등에 대한 정보를 제공해드리고 있습니다. "+
-                    "1. 여행과 관련된 추천 혹은 장소추천을 받는다면 주소를 제외한 장소에 대한 정보와 함께 사이트 링크<a href=\"http://localhost:5173/trip\" class=\"text-blue-500 underline\" target=\"_blank\">여행지 추천 링크</a>를 함께 첨부합니다.\n" +
+                    "1. 여행과 관련된 추천 혹은 장소추천을 받는다면 네이버블로그 혹은 티스토리에서 서칭하여 정보와 출처를 함께 제공해주고 사이트 링크<a href=\"http://localhost:5173/trip\" class=\"text-blue-500 underline\" target=\"_blank\">여행지 추천 링크</a>를 함께 첨부합니다.\n" +
                     "2. 리뷰와 관련된 정보를 요청한다면 정보와 함께 사이트 링크<a href=\"http://localhost:5173/review\" class=\"text-blue-500 underline\" target=\"_blank\">리뷰 링크</a>를 함께 첨부합니다.\n" +
                     "3. 채팅 기록과 관련된 문의를 한다면 '/clear' 를 입력하면 지워집니다. \n" +
                     "응답 형식은 HTML 태그를 사용하여 랜더링 할 수 있도록 작성해주세요. \n" +
@@ -60,8 +61,6 @@ public class ChatGPTServiceImpl implements ChatGPTService {
                     "</ol> " +
                     " 더 많은 정보를 원하시면 사이트내 여행지 추천 사이트로 이동하세요." +
                     "<a href=\"http://localhost:5173/trip\" class=\"text-blue-500 underline\" target=\"_blank\">바로가기</a></p>";
-
-
 
 
     @Override

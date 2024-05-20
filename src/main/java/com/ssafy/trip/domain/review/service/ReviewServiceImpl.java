@@ -35,7 +35,6 @@ public class ReviewServiceImpl implements ReviewService {
     public CustomPage<SimpleReview> getReviews(Pageable pageable, Long userId) {
         List<Long> pagingIds = reviewMapper.findPagingIds(pageable);
         List<ReviewWithUser> reviews = reviewMapper.findReviews(pagingIds, userId);
-        log.debug("{}",reviews);
         int count = reviewMapper.countReviews();
         Page<SimpleReview> pageReviews = new PageImpl<>(reviews.stream().map(SimpleReview::of).toList(), pageable, count);
         return CustomPage.of(pageReviews.getContent(), pageReviews.getNumber(), !pageReviews.isLast());
