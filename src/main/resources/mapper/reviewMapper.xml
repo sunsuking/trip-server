@@ -6,12 +6,15 @@
         <result column="nickname" property="nickname"/>
         <result column="profile_image" property="profileImage"/>
     </resultMap>
+
     <resultMap id="reviewWithUser" type="com.ssafy.trip.domain.review.entity.ReviewWithUser">
         <id column="review_id" property="reviewId"/>
         <result column="is_liked" property="isLiked"/>
         <result column="content" property="content"/>
+        <result column="tour_name" property="tourName"/>
         <result column="tour_id" property="tourId"/>
         <result column="like_count" property="likeCount"/>
+        <result column="rating" property="rating"/>
         <result column="address" property="address"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
@@ -31,11 +34,13 @@
     <select id="findReviews" resultMap="reviewWithUser">
         SELECT R.review_id,
         R.content,
+        T.name as tour_name,
         R.tour_id,
         R.created_at,
         R.updated_at,
         I.image,
         R.like_count,
+        R.rating,
         U.user_id,
         U.nickname,
         U.profile_image,
@@ -78,9 +83,11 @@
     <select id="findById" resultMap="reviewWithUser">
         SELECT R.review_id,
                R.content,
+               T.name as tour_name,
                R.tour_id,
                R.created_at,
                R.updated_at,
+               R.rating,
                I.image,
                R.like_count,
                U.user_id,
@@ -96,26 +103,9 @@
         WHERE R.review_id = #{reviewId}
     </select>
 
-    <select id="findAllById" resultMap="reviewWithUser">
-        SELECT r.review_id,
-               r.content,
-               u.nickname as authorName,
-               u.email,
-               r.tour_id,
-               r.created_at,
-               r.updated_at,
-               r.like_count,
-               i.image
-        FROM review r
-         LEFT JOIN review_images i ON r.review_id = i.review_id
-            JOIN users u ON r.user_id = u.user_id
-        WHERE u.user_id = #{userId}
-        ORDER BY r.created_at DESC
-    </select>
-
     <insert id="saveReview" useGeneratedKeys="true" keyProperty="create.reviewId">
-        INSERT INTO review(content, user_id, tour_id)
-        VALUES (#{create.content}, #{authorId}, #{create.tourId})
+        INSERT INTO review(content, user_id, tour_id, rating)
+        VALUES (#{create.content}, #{authorId}, #{create.tourId}, #{create.rating})
     </insert>
 
     <update id="updateReview">

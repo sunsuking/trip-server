@@ -18,11 +18,23 @@
         FROM review_comment c
                  JOIN users u ON c.user_id = u.user_id
         WHERE review_id = #{reviewId}
+        ORDER BY created_at
     </select>
 
     <insert id="save">
         INSERT INTO review_comment(review_id, user_id, content)
         VALUES (#{reviewId}, #{userId}, #{content});
     </insert>
+
+    <delete id="delete">
+        DELETE FROM review_comment
+        WHERE comment_id = #{commentId}
+    </delete>
+
+    <update id="update">
+        UPDATE review_comment
+        SET content = #{update.content}
+        WHERE comment_id = #{commentId}
+    </update>
 
 </mapper>

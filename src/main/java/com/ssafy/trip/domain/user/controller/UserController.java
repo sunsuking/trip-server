@@ -5,29 +5,28 @@ import com.ssafy.trip.core.exception.CustomException;
 import com.ssafy.trip.core.exception.ErrorCode;
 import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.auth.service.AuthService;
+import com.ssafy.trip.domain.review.dto.ReviewData;
+import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
+import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
 import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
+import com.ssafy.trip.domain.user.dto.UserData.Profile;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -42,9 +41,14 @@ public class UserController {
     public SuccessResponse<UserData.LoginUser> me(@CurrentUser User user) {
         if (user == null) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
-//            return SuccessResponse.of(UserData.LoginUser.unauthenticated());
         }
         return SuccessResponse.of(UserData.LoginUser.authenticated(user));
+    }
+
+    @GetMapping("/{userId}")
+    public SuccessResponse<Profile> getUser(@PathVariable Long userId) {
+        Profile profile = userService.getProfile(userId);
+        return SuccessResponse.of(profile);
     }
 
     @GetMapping("/list")
@@ -111,5 +115,20 @@ public class UserController {
     public ResponseEntity<Void> dropUser(@PathVariable Long userId) {
         userService.drop(userId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/comments")
+    public SuccessResponse<List<SimpleComment>> commentsByUserId(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(userService.commentsByUserId(userId));
+    }
+
+    @GetMapping("/{userId}/reviews")
+    public SuccessResponse<List<UserData.SimpleReview>> getReviewsById(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(userService.getReviewsById(userId));
+    }
+
+    @GetMapping("/{userId}/likes")
+    public SuccessResponse<List<UserData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
+        return SuccessResponse.of(userService.getLikedReviewsById(userId));
     }
 }
