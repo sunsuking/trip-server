@@ -27,7 +27,7 @@
     <select id="findPagingIds">
         SELECT review_id
         FROM review
-        ORDER BY review_id DESC
+        ORDER BY created_at DESC
         LIMIT #{pageSize} OFFSET #{offset};
     </select>
 
@@ -55,6 +55,7 @@
         <foreach collection="reviewIds" item="reviewId" open="(" separator="," close=")">
             #{reviewId}
         </foreach>
+        ORDER BY R.created_at DESC
     </select>
 
     <select id="findLikedAllById" resultMap="reviewWithUser">
