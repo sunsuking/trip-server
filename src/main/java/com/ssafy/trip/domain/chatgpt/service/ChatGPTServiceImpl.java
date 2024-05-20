@@ -30,8 +30,8 @@ public class ChatGPTServiceImpl implements ChatGPTService {
     private String openaiApiKey;
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String MODEL = "gpt-3.5-turbo";
-//    private static final String MODEL = "gpt-4o";
+//    private static final String MODEL = "gpt-3.5-turbo";
+    private static final String MODEL = "gpt-4o";
 
     private final String RECOMMEND_PROMPT_TEMPLATE =
             "여행 후기 작성을 도와주세요 위치를 기반으로 한 여행 후기를 작성해야합니다. \n" +

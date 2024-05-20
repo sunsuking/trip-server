@@ -89,6 +89,7 @@ public class ReviewData {
         private String content;
         @JsonProperty("isLiked")
         private boolean isLiked;
+        private int likeCount;
         private int rating;
         private int tourId;
         private String tourName;
@@ -101,6 +102,7 @@ public class ReviewData {
             simpleReview.setReviewId(review.getReviewId());
             simpleReview.setContent(review.getContent());
             simpleReview.setLiked(review.isLiked());
+            simpleReview.setLikeCount(review.getLikeCount());
             simpleReview.setRating(review.getRating());
             simpleReview.setAddress(review.getAddress());
             simpleReview.setTourName(review.getTourName());
@@ -110,5 +112,10 @@ public class ReviewData {
             simpleReview.setUser(review.getUser());
             return simpleReview;
         }
+    }
+
+    @Data
+    public static class UpdateComment{
+        private String content;
     }
 }

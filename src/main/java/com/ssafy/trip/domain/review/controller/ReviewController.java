@@ -78,6 +78,31 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
+    @PutMapping
+    public SuccessResponse<Void> update(@RequestBody Update update) {
+        reviewService.updateReview(update);
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> delete(@PathVariable("id") Long id) {
+        reviewService.deleteReview(id);
+        return SuccessResponse.empty();
+    }
+
+    @PostMapping("/{id}/like")
+    public SuccessResponse<Void> like(@PathVariable("id") Long reviewId, @CurrentUser User user) {
+        reviewService.saveLike(reviewId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{id}/like")
+    public SuccessResponse<Void> unLike(@PathVariable("id") Long reviewId, @CurrentUser User user) {
+        reviewService.deleteLike(reviewId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
     /**
      * 리뷰 댓글 조회
      *
@@ -108,31 +133,17 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @PutMapping
-    public SuccessResponse<Void> update(@RequestBody Update update) {
-        reviewService.updateReview(update);
-        return SuccessResponse.empty();
-    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/comment")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public SuccessResponse<Void> delete(@PathVariable("id") Long id) {
-        reviewService.deleteReview(id);
+    public SuccessResponse<Void> deleteComment(@PathVariable("id") Long commentId) {
+        reviewService.deleteComment(commentId);
         return SuccessResponse.empty();
     }
 
-    @PostMapping("/{id}/like")
-    public SuccessResponse<Void> like(@PathVariable("id") Long reviewId, @CurrentUser User user) {
-        reviewService.saveLike(reviewId, user.getUserId());
+    @PatchMapping("/{id}/comment")
+    public SuccessResponse<Void> updateComment(@PathVariable("id") Long commentId, @RequestBody ReviewData.UpdateComment update) {
+        reviewService.updateComment(commentId,update);
         return SuccessResponse.empty();
     }
-
-    @DeleteMapping("/{id}/like")
-    public SuccessResponse<Void> unLike(@PathVariable("id") Long reviewId, @CurrentUser User user) {
-        reviewService.deleteLike(reviewId, user.getUserId());
-        return SuccessResponse.empty();
-    }
-
-
 }
 

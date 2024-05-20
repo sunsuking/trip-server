@@ -62,6 +62,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public void deleteComment(Long commentId) {
+        reviewCommentMapper.delete(commentId);
+    }
+
+    @Override
+    public void updateComment(Long commentId, ReviewData.UpdateComment update) {
+        reviewCommentMapper.update(commentId, update);
+    }
+
+    @Override
     @Transactional
     public void saveReview(Create create, Long userId, List<MultipartFile> images) {
         reviewMapper.saveReview(create, userId);
