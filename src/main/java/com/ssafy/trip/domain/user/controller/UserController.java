@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,23 +51,23 @@ public class UserController {
         return SuccessResponse.of(userService.findById(userId,user.getUserId()));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<User>> getAllUser() {
+    @GetMapping("")
+    public SuccessResponse<List<User>> getAllUser() {
         List<User> list = userService.findAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return SuccessResponse.of(list);
     }
 
     // 특정 회원 조회
-    @GetMapping("")
-    public ResponseEntity<List<User>> getUserByKeyword(@RequestParam String keyword) {
+    @GetMapping("/search")
+    public SuccessResponse<List<User>> getUserByKeyword(@RequestParam String keyword) {
         List<User> list = userService.findByKeyword(keyword);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return SuccessResponse.of(list);
     }
 
-    @PatchMapping("/update/{userId}")
-    public ResponseEntity<Void> updateIsLocked(@PathVariable Long userId) {
+    @PatchMapping("/{userId}")
+    public SuccessResponse<Void> updateIsLocked(@PathVariable Long userId) {
         userService.updateIsLocked(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     @PatchMapping("/me")
@@ -112,10 +111,10 @@ public class UserController {
         return SuccessResponse.empty();
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> dropUser(@PathVariable Long userId) {
+    @DeleteMapping("/admin/{userId}")
+    public SuccessResponse<Void> dropUser(@PathVariable Long userId) {
         userService.drop(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     @GetMapping("/{userId}/comments")
