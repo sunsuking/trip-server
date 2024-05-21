@@ -1,14 +1,12 @@
 package com.ssafy.trip.domain.search.controller;
 
+import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.notice.entity.Notice;
-import com.ssafy.trip.domain.review.entity.Review;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import com.ssafy.trip.domain.search.service.SearchService;
 import com.ssafy.trip.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,7 +22,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("")
-    public ResponseEntity<Map<String, List>> search(@RequestParam String searchKeyword) {
+    public SuccessResponse<Map<String, List>> search(@RequestParam String searchKeyword) {
         // Review
         List<ReviewWithUser> reviews = searchService.searchReviewsByKeyword(searchKeyword);
         // Notice
@@ -37,6 +35,6 @@ public class SearchController {
         hashMap.put("notices", notices);
         hashMap.put("users", users);
 
-        return new ResponseEntity<>(hashMap, HttpStatus.OK);
+        return SuccessResponse.of(hashMap);
     }
 }

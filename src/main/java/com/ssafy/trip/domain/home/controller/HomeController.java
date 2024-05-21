@@ -1,5 +1,6 @@
 package com.ssafy.trip.domain.home.controller;
 
+import com.ssafy.trip.core.response.SuccessResponse;
 import com.ssafy.trip.domain.home.dto.HomeData;
 import com.ssafy.trip.domain.home.service.HomeService;
 import com.ssafy.trip.domain.review.entity.Review;
@@ -30,7 +31,7 @@ public class HomeController {
     private final TourService tourService;
 
     @GetMapping("")
-    public ResponseEntity<HomeData> getHomeData() {
+    public SuccessResponse<HomeData> getHomeData() {
 
         Optional<NumberData> numberData = homeService.getTotalNumbers();
 
@@ -65,6 +66,6 @@ public class HomeController {
         homeData.setTopTours(tourList);
         homeData.setTopReviews(reviewList);
 
-        return new ResponseEntity<>(homeData, HttpStatus.OK);
+        return SuccessResponse.of(homeData);
     }
 }

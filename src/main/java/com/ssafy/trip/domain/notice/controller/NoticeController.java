@@ -7,14 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -25,27 +21,27 @@ public class NoticeController {
     private Logger log = LoggerFactory.getLogger(getClass());
 
     // 공지사항 전체 조회
-    @GetMapping("/list")
-    public ResponseEntity<List<Notice>> findNotices() {
-        return new ResponseEntity<>(noticeService.findNotices(), HttpStatus.OK);
+    @GetMapping("")
+    public SuccessResponse<List<Notice>> findNotices() {
+        return SuccessResponse.of(noticeService.findNotices());
     }
 
     // 공지사항 단건 조회
-    @GetMapping("/view/{noticeId}")
-    public ResponseEntity<Optional<Notice>> findNoticeById(@PathVariable Long noticeId) {
-        return new ResponseEntity<>(noticeService.findNoticeById(noticeId), HttpStatus.OK);
+    @GetMapping("/{noticeId}")
+    public SuccessResponse<Optional<Notice>> findNoticeById(@PathVariable Long noticeId) {
+        return SuccessResponse.of(noticeService.findNoticeById(noticeId));
     }
 
     // 특정 공지사항 조회
-    @GetMapping("")
-    public ResponseEntity<List<Notice>> findNoticeByKeyword(@RequestParam String keyword) {
+    @GetMapping("/search")
+    public SuccessResponse<List<Notice>> findNoticeByKeyword(@RequestParam String keyword) {
         List<Notice> list = noticeService.findNoticesByKeyword(keyword);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return SuccessResponse.of(list);
     }
 
     // 공지사항 등록
     @PostMapping("/create")
-    public ResponseEntity<Void> save(
+    public SuccessResponse<Void> save(
             Notice noticeDto,
             @RequestParam(value = "images", required = false) List<MultipartFile> images
         ) {
@@ -53,21 +49,21 @@ public class NoticeController {
         System.out.println(images);
         
         noticeService.save(noticeDto, images);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     // 공지사항 수정
-    @PutMapping("/modify/{noticeId}")
-    public ResponseEntity<Void> modify(@RequestBody Notice noticeDto, @PathVariable Long noticeId) {
+    @PutMapping("/{noticeId}")
+    public SuccessResponse<Void> modify(@RequestBody Notice noticeDto, @PathVariable Long noticeId) {
         noticeService.update(noticeDto, noticeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     // 공지사항 삭제
-    @DeleteMapping("/delete/{noticeId}")
-    public ResponseEntity<Void> delete(@PathVariable Long noticeId) {
+    @DeleteMapping("/{noticeId}")
+    public SuccessResponse<Void> delete(@PathVariable Long noticeId) {
         noticeService.delete(noticeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
 }
