@@ -38,6 +38,11 @@ public interface UserMapper {
 
     void delete(Long userId);
 
+    void deleteProfileImage(Long userId);
+
+    String getProfileImage(Long userId);
+
+
     List<SimpleComment> commentsByUserId(Long userId);
 
     List<UserData.SimpleReview> getReviewsById(Long userId);
