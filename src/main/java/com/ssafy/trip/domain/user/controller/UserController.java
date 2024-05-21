@@ -46,9 +46,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public SuccessResponse<Profile> getUser(@PathVariable Long userId) {
-        Profile profile = userService.getProfile(userId);
-        return SuccessResponse.of(profile);
+    public SuccessResponse<UserData.SimpleProfile> findById(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user) {
+        return SuccessResponse.of(userService.findById(userId,user.getUserId()));
     }
 
     @GetMapping("/list")
@@ -131,4 +132,58 @@ public class UserController {
     public SuccessResponse<List<UserData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
         return SuccessResponse.of(userService.getLikedReviewsById(userId));
     }
+
+
+    @GetMapping("/{userId}/check")
+    public SuccessResponse<Boolean> isFollow(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.isFollow(followeeId,user.getUserId()));
+    }
+
+    @PostMapping("/{userId}/follow")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SuccessResponse<Void> followUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.followUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{userId}/unfollow")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> unfollowUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.unFollowUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    // 해당유저를 팔로우하는 유저리스트
+    @GetMapping("/{userId}/following")
+    public SuccessResponse<List<SimpleUser>> getFollowing(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user
+    ){
+        return SuccessResponse.of(userService.getFollowing(userId,user.getUserId()));
+    }
+
+    // 자신을 팔로우하는 유저리스트
+    @GetMapping("/{userId}/follower")
+    public SuccessResponse<List<SimpleUser>> getFollowers(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.getFollowers(userId,user.getUserId()));
+    }
+
+    @GetMapping("/{userId}/followerCount")
+    public SuccessResponse<Integer> getFollowerCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowerCount(userId));
+    }
+
+    @GetMapping("/{userId}/followingCount")
+    public SuccessResponse<Integer> getFollowingCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowingCount(userId));
+    }
+
 }

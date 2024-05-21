@@ -55,7 +55,9 @@ public class ReviewController {
             @CurrentUser User user
     ) {
         Long userId = user == null ? 0 : user.getUserId();
-        return SuccessResponse.of(reviewService.findById(reviewId, userId).orElse(null));
+        ReviewData.Review review = reviewService.findById(reviewId, userId).orElse(null);
+        log.debug("review: {}",review);
+        return SuccessResponse.of(review);
     }
 
     /**
@@ -77,9 +79,15 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @PutMapping
-    public SuccessResponse<Void> update(@RequestBody Update update) {
-        reviewService.updateReview(update);
+    @PatchMapping("/{id}")
+    public SuccessResponse<Void> update(
+            Update update,
+            @PathVariable("id") Long reviewId,
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam("removeImages") List<String> removeImages,
+            @CurrentUser User user
+    ) {
+        reviewService.updateReview(user.getUserId(), reviewId, update, images, removeImages);
         return SuccessResponse.empty();
     }
 

@@ -89,6 +89,7 @@
     <resultMap id="simpleReview" type="com.ssafy.trip.domain.user.dto.UserData$SimpleReview">
         <id column="review_id" property="reviewId"/>
         <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
         <result column="created_at" property="createdAt"/>
         <collection property="images" ofType="String" javaType="ArrayList">
             <result column="image" property="imgUrl"/>
@@ -99,7 +100,8 @@
         SELECT r.review_id,
                r.content,
                r.created_at,
-               i.image
+               i.image,
+               u.user_id
         FROM review r
                  LEFT JOIN review_images i ON r.review_id = i.review_id
                  JOIN users u ON r.user_id = u.user_id
@@ -111,26 +113,91 @@
         SELECT r.review_id,
                r.content,
                r.created_at,
-               i.image
+               i.image,
+               u.user_id
         FROM review r
-                 JOIN review_like rl ON r.review_id = rl.review_id
-                 LEFT JOIN review_images i ON r.review_id = i.review_id
-                 JOIN users u ON r.user_id = u.user_id
+            JOIN review_like rl ON r.review_id = rl.review_id
+            LEFT JOIN review_images i ON r.review_id = i.review_id
+            JOIN users u ON r.user_id = u.user_id
         WHERE rl.user_id = #{userId}
         ORDER BY r.created_at DESC
     </select>
 
-    <!--    <select id="findById" >-->
-    <!--        SELECT-->
-    <!--            user_id,-->
-    <!--            email,-->
-    <!--            nickname,-->
-    <!--            profile_image,-->
-    <!--            IFNULL(c.name,'정보없음') as city,-->
-    <!--            IFNULL(t.name,'정보없음') as town-->
-    <!--        FROM users u-->
-    <!--                 LEFT JOIN town t ON u.town_code = t.town_code AND u.city_code = t.city_code-->
-    <!--                 LEFT JOIN city c ON t.city_code = c.city_code-->
-    <!--        WHERE user_id = ${userId}-->
-    <!--    </select>-->
+    <select id="findById" >
+        SELECT
+            user_id,
+            email,
+            nickname,
+            profile_image,
+            IFNULL(c.name,'정보없음') as city,
+            IFNULL(t.name,'정보없음') as town,
+            CASE
+                WHEN f.follower_id IS NOT NULL THEN 1
+                ELSE 0
+            END AS is_following
+        FROM users u
+                 LEFT JOIN town t ON u.town_code = t.town_code AND u.city_code = t.city_code
+                 LEFT JOIN city c ON t.city_code = c.city_code
+                 LEFT JOIN follow f ON f.followee_id = #{userId} AND f.follower_id = #{currentId}
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 팔로잉,팔로워 -->
+    <select id="isFollow" resultType="boolean">
+        SELECT count(*)
+        FROM follow
+        WHERE followee_id=#{followeeId} AND follower_id=#{followerId}
+    </select>
+
+    <insert id="follow">
+        INSERT INTO follow(followee_id, follower_id)
+        VALUES(#{followeeId},#{followerId})
+    </insert>
+
+    <delete id="unFollow">
+        DELETE FROM follow
+        WHERE followee_id=#{followeeId} AND follower_id=#{followerId}
+    </delete>
+
+    <select id="getFollowing">
+        SELECT
+            u.user_id,
+            u.nickname,
+            u.profile_image,
+            CASE
+                WHEN cf.follower_id IS NOT NULL THEN 1
+                ELSE 0
+                END AS is_following
+        FROM follow f
+            JOIN users u ON f.followee_id = u.user_id
+            LEFT JOIN follow cf ON cf.followee_id = u.user_id AND cf.follower_id = #{currentId}
+        WHERE f.follower_id=#{userId}
+    </select>
+
+    <select id="getFollowers">
+        SELECT
+            u.user_id,
+            u.nickname,
+            u.profile_image,
+            CASE
+                WHEN cf.follower_id IS NOT NULL THEN 1
+                ELSE 0
+                END AS is_following
+        FROM follow f
+                 JOIN users u ON f.follower_id = u.user_id
+                 LEFT JOIN follow cf ON cf.followee_id = u.user_id AND cf.follower_id = #{currentId}
+        WHERE f.followee_id = #{userId}
+    </select>
+
+    <select id="getFollowerCount">
+        SELECT COUNT(*)
+        FROM follow
+        WHERE followee_id=#{userId}
+    </select>
+
+    <select id="getFollowingCount">
+        SELECT COUNT(*)
+        FROM follow
+        WHERE follower_id=#{userId};
+    </select>
 </mapper>

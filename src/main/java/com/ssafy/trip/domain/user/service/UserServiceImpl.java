@@ -1,8 +1,14 @@
 package com.ssafy.trip.domain.user.service;
 
+import com.ssafy.trip.core.exception.CustomException;
+import com.ssafy.trip.core.exception.ErrorCode;
+import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.review.entity.Comment.SimpleComment;
 import com.ssafy.trip.domain.user.dto.UserData;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
+import com.ssafy.trip.domain.user.entity.User;
+import com.ssafy.trip.core.service.S3UploadService;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
 import com.ssafy.trip.domain.user.entity.User;
@@ -87,6 +93,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserData.SimpleReview> getLikedReviewsById(Long userId) {
         return userMapper.getLikedReviewsById(userId);
+    }
+
+    @Override
+    public UserData.SimpleProfile findById(Long userId,Long currentId) {
+        return userMapper.findById(userId,currentId);
+    }
+
+    @Override
+    public boolean isFollow(Long followeeId, Long followerId) {
+        return userMapper.isFollow(followeeId,followerId);
+    }
+
+    @Override
+    public void followUser(Long followeeId, Long followerId) {
+        userMapper.follow(followeeId, followerId);
+    }
+
+    @Override
+    public void unFollowUser(Long followeeId, Long followerId) {
+        userMapper.unFollow(followeeId, followerId);
+    }
+
+    @Override
+    public List<SimpleUser> getFollowing(Long userId, Long currentId) {
+        return userMapper.getFollowing(userId, currentId);
+    }
+
+    @Override
+    public List<SimpleUser> getFollowers(Long userId, Long currentId) {
+        return userMapper.getFollowers(userId, currentId);
+    }
+
+    @Override
+    public int getFollowerCount(Long userId) {
+        return userMapper.getFollowerCount(userId);
+    }
+
+    @Override
+    public int getFollowingCount(Long userId) {
+        return userMapper.getFollowingCount(userId);
     }
 
     @Override

@@ -78,6 +78,7 @@ public class UserData {
     @Data
     public static class SimpleReview {
         private Long reviewId;
+        private Long userId;
         private String content;
         private LocalDateTime createdAt;
         private List<String> images;
@@ -91,5 +92,7 @@ public class UserData {
         private String profileImage;
         private String city;
         private String town;
+        @JsonProperty("isFollowing")
+        private boolean isFollowing;
     }
 }

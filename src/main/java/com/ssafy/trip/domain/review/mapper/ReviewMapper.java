@@ -1,8 +1,6 @@
 package com.ssafy.trip.domain.review.mapper;
 
-import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
-import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,7 +26,7 @@ public interface ReviewMapper {
     Long saveReview(Create create, long authorId);
 
     // UPDATE
-    void updateReview(Update update);
+    void updateReview(Long reviewId, Update update);
 
     // DELETE
     void deleteReview(long reviewId);
@@ -43,4 +41,7 @@ public interface ReviewMapper {
 
     void saveImg(Long reviewId, String imgUrl);
 
+    List<String> getImg(Long reviewId);
+
+    void deleteImg(Long reviewId, String imgUrl);
 }

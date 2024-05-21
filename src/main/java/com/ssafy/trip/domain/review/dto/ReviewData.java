@@ -45,7 +45,7 @@ public class ReviewData {
     public static class Update {
         private String content;
         private int tourId;
-        private Long reviewId;
+        private int rating;
     }
 
     @Data
@@ -53,6 +53,8 @@ public class ReviewData {
         private Long reviewId;
         @JsonProperty("isLiked")
         private boolean isLiked;
+        @JsonProperty("isFollowing")
+        private boolean isFollowing;
         private String address;
         private String content;
         private String tourName;
@@ -69,6 +71,7 @@ public class ReviewData {
             reviewResponse.setReviewId(review.getReviewId());
             reviewResponse.setContent(review.getContent());
             reviewResponse.setLiked(review.isLiked());
+            reviewResponse.setFollowing(review.isFollowing());
             reviewResponse.setAddress(review.getAddress());
             reviewResponse.setTourName(review.getTourName());
             reviewResponse.setTourId(review.getTourId());
@@ -89,6 +92,8 @@ public class ReviewData {
         private String content;
         @JsonProperty("isLiked")
         private boolean isLiked;
+        @JsonProperty("isFollowing")
+        private boolean isFollowing;
         private int likeCount;
         private int rating;
         private int tourId;
@@ -102,6 +107,7 @@ public class ReviewData {
             simpleReview.setReviewId(review.getReviewId());
             simpleReview.setContent(review.getContent());
             simpleReview.setLiked(review.isLiked());
+            simpleReview.setFollowing(review.isFollowing());
             simpleReview.setLikeCount(review.getLikeCount());
             simpleReview.setRating(review.getRating());
             simpleReview.setAddress(review.getAddress());
