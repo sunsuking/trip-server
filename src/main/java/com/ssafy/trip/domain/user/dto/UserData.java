@@ -91,5 +91,7 @@ public class UserData {
         private String profileImage;
         private String city;
         private String town;
+        @JsonProperty("isFollowing")
+        private boolean isFollowing;
     }
 }

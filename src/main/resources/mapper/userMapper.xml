@@ -113,11 +113,16 @@
             nickname,
             profile_image,
             IFNULL(c.name,'정보없음') as city,
-            IFNULL(t.name,'정보없음') as town
+            IFNULL(t.name,'정보없음') as town,
+            CASE
+                WHEN f.follower_id IS NOT NULL THEN 1
+                ELSE 0
+            END AS is_following
         FROM users u
                  LEFT JOIN town t ON u.town_code = t.town_code AND u.city_code = t.city_code
                  LEFT JOIN city c ON t.city_code = c.city_code
-        WHERE user_id = ${userId}
+                 LEFT JOIN follow f ON f.followee_id = #{userId} AND f.follower_id = #{currentId}
+        WHERE user_id = #{userId}
     </select>
 
     <!-- 팔로잉,팔로워 -->
@@ -137,27 +142,45 @@
         WHERE followee_id=#{followeeId} AND follower_id=#{followerId}
     </delete>
     
-    <select id="getFollows">
-        SELECT u.user_id, u.nickname, u.profile_image
-        FROM follow f JOIN users u ON f.followee_id = u.user_id
-        WHERE follower_id=#{userId}
+    <select id="getFollowing">
+        SELECT
+            u.user_id,
+            u.nickname,
+            u.profile_image,
+            CASE
+                WHEN cf.follower_id IS NOT NULL THEN 1
+                ELSE 0
+                END AS is_following
+        FROM follow f
+            JOIN users u ON f.followee_id = u.user_id
+            LEFT JOIN follow cf ON cf.followee_id = u.user_id AND cf.follower_id = #{currentId}
+        WHERE f.follower_id=#{userId}
     </select>
     
     <select id="getFollowers">
-        SELECT u.user_id, u.nickname, u.profile_image
-        FROM follow f JOIN users u ON f.follower_id = u.user_id
-        WHERE followee_id=#{userId}
+        SELECT
+            u.user_id,
+            u.nickname,
+            u.profile_image,
+            CASE
+                WHEN cf.follower_id IS NOT NULL THEN 1
+                ELSE 0
+                END AS is_following
+        FROM follow f
+                 JOIN users u ON f.follower_id = u.user_id
+                 LEFT JOIN follow cf ON cf.followee_id = u.user_id AND cf.follower_id = #{currentId}
+        WHERE f.followee_id = #{userId}
     </select>
     
-    <select id="getFollowCount">
+    <select id="getFollowerCount">
         SELECT COUNT(*)
         FROM follow
-        WHERE follower_id=#{userId};
+        WHERE followee_id=#{userId}
     </select>
     
     <select id="getFollowingCount">
         SELECT COUNT(*)
         FROM follow
-        WHERE followee_id=#{userId}
+        WHERE follower_id=#{userId};
     </select>
 </mapper>

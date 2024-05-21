@@ -9,6 +9,7 @@ import java.util.List;
 public class Review {
     private Long reviewId;
     private boolean isLiked;
+    private boolean isFollowing;
     private String address;
     private String content;
     private String tourName;

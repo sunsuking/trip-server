@@ -39,7 +39,7 @@ public interface UserMapper {
 
     List<UserData.SimpleReview> getLikedReviewsById(Long userId);
 
-    UserData.SimpleProfile findById(Long userId);
+    UserData.SimpleProfile findById(Long userId,Long currentId);
 
     boolean isFollow(Long followeeId, Long followerId);
 
@@ -47,11 +47,11 @@ public interface UserMapper {
 
     void unFollow(Long followeeId, Long followerId);
 
-    List<SimpleUser> getFollows(Long userId);
+    List<SimpleUser> getFollowing(Long userId, Long currentId);
 
-    List<SimpleUser> getFollowers(Long userId);
+    List<SimpleUser> getFollowers(Long userId, Long currentId);
 
-    int getFollowCount(Long userId);
+    int getFollowerCount(Long userId);
 
     int getFollowingCount(Long userId);
 }

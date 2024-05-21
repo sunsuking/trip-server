@@ -56,7 +56,9 @@ public class ReviewController {
             @CurrentUser User user
     ) {
         Long userId = user == null ? 0 : user.getUserId();
-        return SuccessResponse.of(reviewService.findById(reviewId, userId).orElse(null));
+        ReviewData.Review review = reviewService.findById(reviewId, userId).orElse(null);
+        log.debug("review: {}",review);
+        return SuccessResponse.of(review);
     }
 
     /**

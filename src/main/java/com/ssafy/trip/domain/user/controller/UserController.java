@@ -45,8 +45,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public SuccessResponse<UserData.SimpleProfile> findById(@PathVariable("userId") Long userId) {
-        return SuccessResponse.of(userService.findById(userId));
+    public SuccessResponse<UserData.SimpleProfile> findById(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user) {
+        return SuccessResponse.of(userService.findById(userId,user.getUserId()));
     }
 
     @GetMapping("/list")
@@ -143,21 +145,26 @@ public class UserController {
         return SuccessResponse.empty();
     }
 
-    // 자신이 팔로우하는 유저리스트
-    @GetMapping("/{userId}/follow")
-    public SuccessResponse<List<SimpleUser>> getFollows(@PathVariable("userId") Long userId){
-        return SuccessResponse.of(userService.getFollows(userId));
+    // 해당유저를 팔로우하는 유저리스트
+    @GetMapping("/{userId}/following")
+    public SuccessResponse<List<SimpleUser>> getFollowing(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user
+    ){
+        return SuccessResponse.of(userService.getFollowing(userId,user.getUserId()));
     }
 
     // 자신을 팔로우하는 유저리스트
-    @GetMapping("/{userId}/following")
-    public SuccessResponse<List<SimpleUser>> getFollowers(@PathVariable("userId") Long userId){
-        return SuccessResponse.of(userService.getFollowers(userId));
+    @GetMapping("/{userId}/follower")
+    public SuccessResponse<List<SimpleUser>> getFollowers(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.getFollowers(userId,user.getUserId()));
     }
 
     @GetMapping("/{userId}/followerCount")
-    public SuccessResponse<Integer> getFollowCount(@PathVariable("userId") Long userId){
-        return SuccessResponse.of(userService.getFollowCount(userId));
+    public SuccessResponse<Integer> getFollowerCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowerCount(userId));
     }
 
     @GetMapping("/{userId}/followingCount")

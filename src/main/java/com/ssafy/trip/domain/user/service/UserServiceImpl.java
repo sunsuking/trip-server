@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserData.SimpleProfile findById(Long userId) {
-        return userMapper.findById(userId);
+    public UserData.SimpleProfile findById(Long userId,Long currentId) {
+        return userMapper.findById(userId,currentId);
     }
 
     @Override
@@ -103,18 +103,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<SimpleUser> getFollows(Long userId) {
-        return userMapper.getFollows(userId);
+    public List<SimpleUser> getFollowing(Long userId, Long currentId) {
+        return userMapper.getFollowing(userId, currentId);
     }
 
     @Override
-    public List<SimpleUser> getFollowers(Long userId) {
-        return userMapper.getFollowers(userId);
+    public List<SimpleUser> getFollowers(Long userId, Long currentId) {
+        return userMapper.getFollowers(userId, currentId);
     }
 
     @Override
-    public int getFollowCount(Long userId) {
-        return userMapper.getFollowCount(userId);
+    public int getFollowerCount(Long userId) {
+        return userMapper.getFollowerCount(userId);
     }
 
     @Override
