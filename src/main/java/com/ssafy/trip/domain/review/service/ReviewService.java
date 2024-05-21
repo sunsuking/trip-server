@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewService {
+    void deleteAllReview(List<Integer> checkedList);
+
     CustomPage<SimpleReview> getReviews(Pageable pageable, Long userId);
 
     Optional<ReviewData.Review> findById(Long reviewId, Long userId);
@@ -38,5 +40,5 @@ public interface ReviewService {
 
     void updateComment(Long commentId, ReviewData.UpdateComment update);
 
-
+    List<SimpleReview> getAllReview();
 }

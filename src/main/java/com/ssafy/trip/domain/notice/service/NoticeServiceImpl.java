@@ -44,9 +44,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void save(Notice notice, List<MultipartFile> images) {
-
         HashMap<String, String> imgUrlMap = new HashMap<>();
-
         // S3로 이미지 업로드
         if (images != null && images.size() > 0) {
             AtomicInteger atomicInteger = new AtomicInteger(0);

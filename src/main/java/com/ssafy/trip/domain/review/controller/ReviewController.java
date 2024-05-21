@@ -42,6 +42,11 @@ public class ReviewController {
         return SuccessResponse.of(reviewService.getReviews(pageable, userId));
     }
 
+    @GetMapping("/all")
+    public SuccessResponse<List<SimpleReview>> getAllReview(){
+        return SuccessResponse.of(reviewService.getAllReview());
+    }
+
     /**
      * 리뷰 상세 조회
      *
@@ -95,6 +100,13 @@ public class ReviewController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public SuccessResponse<Void> delete(@PathVariable("id") Long id) {
         reviewService.deleteReview(id);
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/all")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> deleteAll(@RequestBody List<Integer> checkedList) {
+        reviewService.deleteAllReview(checkedList);
         return SuccessResponse.empty();
     }
 
