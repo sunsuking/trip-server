@@ -78,6 +78,7 @@ public class UserData {
     @Data
     public static class SimpleReview {
         private Long reviewId;
+        private Long userId;
         private String content;
         private LocalDateTime createdAt;
         private List<String> images;

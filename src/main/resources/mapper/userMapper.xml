@@ -75,6 +75,7 @@
     <resultMap id="simpleReview" type="com.ssafy.trip.domain.user.dto.UserData$SimpleReview">
         <id column="review_id" property="reviewId"/>
         <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
         <result column="created_at" property="createdAt"/>
         <collection property="images" ofType="String" javaType="ArrayList">
             <result column="image" property="imgUrl"/>
@@ -85,7 +86,8 @@
         SELECT r.review_id,
                r.content,
                r.created_at,
-               i.image
+               i.image,
+               u.user_id
         FROM review r
                  LEFT JOIN review_images i ON r.review_id = i.review_id
                  JOIN users u ON r.user_id = u.user_id
@@ -97,7 +99,8 @@
         SELECT r.review_id,
                r.content,
                r.created_at,
-               i.image
+               i.image,
+               u.user_id
         FROM review r
             JOIN review_like rl ON r.review_id = rl.review_id
             LEFT JOIN review_images i ON r.review_id = i.review_id
