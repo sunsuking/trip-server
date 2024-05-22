@@ -9,6 +9,7 @@ import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.service.ReviewService;
 import com.ssafy.trip.domain.user.entity.User;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -43,12 +44,12 @@ public class ReviewController {
     }
 
     @GetMapping("/all")
-    public SuccessResponse<List<SimpleReview>> getAllReview(){
+    public SuccessResponse<List<SimpleReview>> getAllReview() {
         return SuccessResponse.of(reviewService.getAllReview());
     }
 
     @GetMapping("/search")
-    public SuccessResponse<List<SimpleReview>> searchReview(@RequestParam String keyword){
+    public SuccessResponse<List<SimpleReview>> searchReview(@RequestParam String keyword) {
         return SuccessResponse.of(reviewService.searchReview(keyword));
     }
 
@@ -66,7 +67,7 @@ public class ReviewController {
     ) {
         Long userId = user == null ? 0 : user.getUserId();
         ReviewData.Review review = reviewService.findById(reviewId, userId).orElse(null);
-        log.debug("review: {}",review);
+        log.debug("review: {}", review);
         return SuccessResponse.of(review);
     }
 
@@ -93,8 +94,8 @@ public class ReviewController {
     public SuccessResponse<Void> update(
             Update update,
             @PathVariable("id") Long reviewId,
-            @RequestParam("images") List<MultipartFile> images,
-            @RequestParam("removeImages") List<String> removeImages,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "removeImages", required = false) List<String> removeImages,
             @CurrentUser User user
     ) {
         reviewService.updateReview(user.getUserId(), reviewId, update, images, removeImages);

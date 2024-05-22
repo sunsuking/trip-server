@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -81,8 +82,10 @@ public class ReviewServiceImpl implements ReviewService {
         });
 
         // 새로 들어온 이미지 추가
-        images.stream().map((image) -> s3UploadService.upload(image).join())
-                .forEach((imgUrl) -> reviewMapper.saveImg(reviewId, imgUrl));
+        if(Objects.nonNull(images) && !images.isEmpty()){
+            images.stream().map((image) -> s3UploadService.upload(image).join())
+                    .forEach((imgUrl) -> reviewMapper.saveImg(reviewId, imgUrl));
+        }
 
         // 정보 업데이트
         reviewMapper.updateReview(reviewId, update);
