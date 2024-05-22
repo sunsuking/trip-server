@@ -13,8 +13,17 @@ public interface ScheduleService {
 
     void createScheduleTrip(Long scheduleId, ScheduleData.CreateScheduleTrip create);
 
-    List<ScheduleResponse> searchAllSchedule();
+    List<ScheduleData.ScheduleSearch> searchAllSchedule(ScheduleData.SearchCondition condition);
+
+    void updateSchedulePublic(Long scheduleId);
+
+    void removePrivilege(Long scheduleId);
+
+    void invite(Long scheduleId, ScheduleData.Invite invite);
+
+    void inviteConfirm(Long scheduleId, ScheduleData.InviteConfirm inviteConfirm);
 
     ScheduleResponse searchSchedule(Long scheduleId);
 
+    ScheduleData.PathResponse searchSchedulePath(Long scheduleId);
 }

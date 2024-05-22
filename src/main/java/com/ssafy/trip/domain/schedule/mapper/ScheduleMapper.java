@@ -1,9 +1,7 @@
 package com.ssafy.trip.domain.schedule.mapper;
 
-import com.ssafy.trip.domain.schedule.entity.Schedule;
-import com.ssafy.trip.domain.schedule.entity.ScheduleTrip;
-import com.ssafy.trip.domain.schedule.entity.ScheduleVehicle;
-import com.ssafy.trip.domain.schedule.entity.ScheduleWithUser;
+import com.ssafy.trip.domain.schedule.dto.ScheduleData;
+import com.ssafy.trip.domain.schedule.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,7 +14,15 @@ public interface ScheduleMapper {
 
     ScheduleWithUser findById(Long scheduleId);
 
-    List<ScheduleWithUser> findAll();
+    List<ScheduleWithSearch> findAll(ScheduleData.SearchCondition condition);
+
+    List<VehicleDetail> findVehicleDetail(Long scheduleId);
+
+    List<TripWithTour> findTripWithTour(Long scheduleId);
+
+    void updatePublic(Long scheduleId, String publicKey);
+
+    void revokePublic(Long scheduleId);
 
     void saveBulkScheduleTrip(List<ScheduleTrip> scheduleTrips);
 

@@ -5,11 +5,10 @@ import lombok.Data;
 @Data
 public class ScheduleVehicle {
     private Long scheduleId;
-    private int vehicleId;
+    private Long vehicleId;
     private String type;
     private int fromTourId;
-    private int toTourId;
+    private Integer toTourId;
     private int day;
     private int order;
-    private boolean room;
 }

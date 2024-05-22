@@ -28,13 +28,20 @@ public class ScheduleController {
     private final ScheduleTripService tripService;
 
     @GetMapping("")
-    public SuccessResponse<List<ScheduleData.ScheduleResponse>> getAllSchedule() {
-        return SuccessResponse.of(scheduleService.searchAllSchedule());
+    public SuccessResponse<List<ScheduleData.ScheduleSearch>> getAllSchedule(
+            @ModelAttribute ScheduleData.SearchCondition condition
+    ) {
+        return SuccessResponse.of(scheduleService.searchAllSchedule(condition));
     }
 
     @GetMapping("/{scheduleId}")
     public SuccessResponse<ScheduleData.ScheduleResponse> getSchedule(@PathVariable Long scheduleId) {
         return SuccessResponse.of(scheduleService.searchSchedule(scheduleId));
+    }
+
+    @GetMapping("/{scheduleId}/path")
+    public SuccessResponse<ScheduleData.PathResponse> getSchedulePath(@PathVariable Long scheduleId) {
+        return SuccessResponse.of(scheduleService.searchSchedulePath(scheduleId));
     }
 
     @PostMapping("/{scheduleId}")
@@ -46,9 +53,41 @@ public class ScheduleController {
         return SuccessResponse.empty();
     }
 
+    @PostMapping("/{scheduleId}/public")
+    public SuccessResponse<Void> updateSchedulePublic(@PathVariable Long scheduleId) {
+        scheduleService.updateSchedulePublic(scheduleId);
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{scheduleId}/revoke")
+    public SuccessResponse<Void> removePrivilege(
+            @PathVariable Long scheduleId
+    ) {
+        scheduleService.removePrivilege(scheduleId);
+        return SuccessResponse.empty();
+    }
+
     @GetMapping("/{scheduleId}/chat")
     public SuccessResponse<List<Chat>> getChats(@PathVariable Long scheduleId) {
         return SuccessResponse.of(scheduleChatRepository.findAll(scheduleId));
+    }
+
+    @PostMapping("/{scheduleId}/invite")
+    public SuccessResponse<Void> invite(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleData.Invite invite
+    ) {
+        scheduleService.invite(scheduleId, invite);
+        return SuccessResponse.empty();
+    }
+
+    @PostMapping("/{scheduleId}/invite/confirm")
+    public SuccessResponse<Void> inviteConfirm(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleData.InviteConfirm inviteConfirm
+    ) {
+        scheduleService.inviteConfirm(scheduleId, inviteConfirm);
+        return SuccessResponse.empty();
     }
 
     @GetMapping("/{scheduleId}/trip")
