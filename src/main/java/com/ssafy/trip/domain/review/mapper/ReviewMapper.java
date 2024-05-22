@@ -1,5 +1,6 @@
 package com.ssafy.trip.domain.review.mapper;
 
+import com.ssafy.trip.domain.review.dto.ReviewData;
 import com.ssafy.trip.domain.review.dto.ReviewData.Create;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.entity.ReviewWithUser;
@@ -15,6 +16,8 @@ public interface ReviewMapper {
     List<ReviewWithUser> findReviews(List<Long> reviewIds, Long userId);
 
     List<Long> findPagingIds(Pageable pageable);
+
+    List<ReviewWithUser> getAllReview();
 
     List<ReviewWithUser> findLikedAllById(Long userId);
 
@@ -44,4 +47,6 @@ public interface ReviewMapper {
     List<String> getImg(Long reviewId);
 
     void deleteImg(Long reviewId, String imgUrl);
+
+    List<ReviewData.SimpleReview> searchReview(String keyword);
 }

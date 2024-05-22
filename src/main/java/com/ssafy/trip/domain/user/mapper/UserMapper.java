@@ -24,8 +24,6 @@ public interface UserMapper {
 
     Optional<User> findByUsername(String username);
 
-    Optional<User> findById(Long userId);
-
     Optional<User> findByEmail(String email);
 
     boolean existsByUsername(String username);
@@ -37,6 +35,11 @@ public interface UserMapper {
     void updateIsLocked(Long userId);
 
     void delete(Long userId);
+
+    void deleteProfileImage(Long userId);
+
+    String getProfileImage(Long userId);
+
 
     List<SimpleComment> commentsByUserId(Long userId);
 

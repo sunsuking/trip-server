@@ -61,6 +61,37 @@
         ORDER BY R.created_at DESC
     </select>
 
+    <select id="getAllReview" resultMap="reviewWithUser">
+        SELECT r.review_id,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               i.image
+        FROM review r
+         LEFT JOIN review_images i ON r.review_id = i.review_id
+         JOIN users u ON r.user_id = u.user_id
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="searchReview" resultMap="reviewWithUser">
+        SELECT r.review_id,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               i.image
+        FROM review r
+                 LEFT JOIN review_images i ON r.review_id = i.review_id
+                 JOIN users u ON r.user_id = u.user_id
+        WHERE content LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY r.created_at DESC
+    </select>
+
     <select id="findLikedAllById" resultMap="reviewWithUser">
         SELECT r.review_id,
                r.content,

@@ -12,6 +12,7 @@ import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Profile;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;

@@ -45,12 +45,6 @@
         VALUES (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{providerType}, #{roleType});
     </insert>
 
-    <select id="findById">
-        SELECT *
-        FROM users
-        WHERE user_id = #{userId};
-    </select>
-
     <update id="update">
         UPDATE users
         <set>
@@ -200,4 +194,16 @@
         FROM follow
         WHERE follower_id=#{userId};
     </select>
+
+    <select id="getProfileImage">
+        SELECT profile_image
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteProfileImage">
+        DELETE FROM users
+        WHERE user_id = #{userId} AND profile_image=#{profileImage}
+
+    </delete>
 </mapper>

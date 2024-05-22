@@ -35,13 +35,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(Update update, MultipartFile profileImage, User user) {
-        String imageSrc = user.getProfileImage();
+        String originSrc = user.getProfileImage();
+        String imageSrc = originSrc;
         if (Objects.nonNull(profileImage)) {
             CompletableFuture<String> future = s3UploadService.upload(profileImage);
             imageSrc = future.join();
         }
         if (update.isDefaultImage()) {
             imageSrc = User.DEFAULT_IMAGE;
+        }
+        if (!originSrc.equals(imageSrc)) {
+            s3UploadService.deleteImageFromS3(originSrc);
         }
         user.updateProfile(update.getNickname(), update.getCityCode(), update.getTownCode(), imageSrc);
         userMapper.update(user);
@@ -77,6 +81,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
+        String profileImagesSrc = userMapper.getProfileImage(user.getUserId());
+        if(Objects.nonNull(profileImagesSrc)){
+            s3UploadService.deleteImageFromS3(profileImagesSrc);
+        }
         userMapper.delete(user.getUserId());
     }
 
