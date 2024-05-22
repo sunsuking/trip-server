@@ -10,6 +10,7 @@
     <resultMap id="reviewWithUser" type="com.ssafy.trip.domain.review.entity.ReviewWithUser">
         <id column="review_id" property="reviewId"/>
         <result column="is_liked" property="isLiked"/>
+        <result column="is_following" property="isFollowing"/>
         <result column="content" property="content"/>
         <result column="tour_name" property="tourName"/>
         <result column="tour_id" property="tourId"/>
@@ -45,16 +46,50 @@
         U.nickname,
         U.profile_image,
         T.address,
-        IFNULL(RL.user_id = #{userId}, 0) AS is_liked
+        IFNULL(RL.user_id = #{userId}, 0) AS is_liked,
+        IFNULL(F.follower_id = #{userId}, 0) AS is_following
         FROM review R
         LEFT JOIN review_images I ON R.review_id = I.review_id
         LEFT JOIN review_like RL ON R.review_id = RL.review_id AND RL.user_id = #{userId}
         LEFT JOIN tour T ON R.tour_id = T.tour_id
         JOIN users U ON R.user_id = U.user_id
+        LEFT JOIN follow F ON F.followee_id = U.user_id AND F.follower_id = #{userId}
         WHERE R.review_id IN
         <foreach collection="reviewIds" item="reviewId" open="(" separator="," close=")">
             #{reviewId}
         </foreach>
+        ORDER BY R.created_at DESC
+    </select>
+
+    <select id="getAllReview" resultMap="reviewWithUser">
+        SELECT r.review_id,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               i.image
+        FROM review r
+         LEFT JOIN review_images i ON r.review_id = i.review_id
+         JOIN users u ON r.user_id = u.user_id
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="searchReview" resultMap="reviewWithUser">
+        SELECT r.review_id,
+               r.content,
+               u.nickname as authorName,
+               u.email,
+               r.tour_id,
+               r.created_at,
+               r.updated_at,
+               i.image
+        FROM review r
+                 LEFT JOIN review_images i ON r.review_id = i.review_id
+                 JOIN users u ON r.user_id = u.user_id
+        WHERE content LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY r.created_at DESC
     </select>
 
     <select id="findLikedAllById" resultMap="reviewWithUser">
@@ -94,12 +129,14 @@
                U.nickname,
                U.profile_image,
                T.address,
-               IFNULL(RL.user_id = #{userId}, 0) AS is_liked
+               IFNULL(RL.user_id = #{userId}, 0) AS is_liked,
+               IFNULL(F.follower_id = #{userId}, 0) AS is_following
         FROM review R
                  LEFT JOIN review_images I ON R.review_id = I.review_id
                  LEFT JOIN review_like RL ON R.review_id = RL.review_id AND RL.user_id = #{userId}
                  LEFT JOIN tour T ON R.tour_id = T.tour_id
                  JOIN users U ON R.user_id = U.user_id
+                 LEFT JOIN follow F ON F.followee_id = U.user_id AND F.follower_id = #{userId}
         WHERE R.review_id = #{reviewId}
     </select>
 
@@ -110,8 +147,9 @@
 
     <update id="updateReview">
         UPDATE review
-        SET content = #{content},
-            tour_id=#{tourId}
+        SET content = #{update.content},
+            tour_id=#{update.tourId},
+            rating=#{update.rating}
         WHERE review_id = #{reviewId};
     </update>
 
@@ -119,6 +157,11 @@
         DELETE
         FROM review
         WHERE review_id = #{reviewId};
+    </delete>
+
+    <delete id="deleteImg">
+        DELETE FROM review_images
+        WHERE review_id = #{reviewId} AND image = #{imgUrl}
     </delete>
 
 
@@ -152,4 +195,10 @@
         INSERT INTO review_images (review_id, image)
         VALUES (#{reviewId}, #{imgUrl});
     </insert>
+
+    <select id="getImg">
+        SELECT image
+        FROM review JOIN review_images ri on review.review_id = ri.review_id
+        WHERE ri.review_id = #{reviewId}
+    </select>
 </mapper>

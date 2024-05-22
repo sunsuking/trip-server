@@ -9,6 +9,7 @@ import com.ssafy.trip.domain.review.dto.ReviewData.SimpleReview;
 import com.ssafy.trip.domain.review.dto.ReviewData.Update;
 import com.ssafy.trip.domain.review.service.ReviewService;
 import com.ssafy.trip.domain.user.entity.User;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,16 @@ public class ReviewController {
         return SuccessResponse.of(reviewService.getReviews(pageable, userId));
     }
 
+    @GetMapping("/all")
+    public SuccessResponse<List<SimpleReview>> getAllReview() {
+        return SuccessResponse.of(reviewService.getAllReview());
+    }
+
+    @GetMapping("/search")
+    public SuccessResponse<List<SimpleReview>> searchReview(@RequestParam String keyword) {
+        return SuccessResponse.of(reviewService.searchReview(keyword));
+    }
+
     /**
      * 리뷰 상세 조회
      *
@@ -55,7 +66,9 @@ public class ReviewController {
             @CurrentUser User user
     ) {
         Long userId = user == null ? 0 : user.getUserId();
-        return SuccessResponse.of(reviewService.findById(reviewId, userId).orElse(null));
+        ReviewData.Review review = reviewService.findById(reviewId, userId).orElse(null);
+        log.debug("review: {}", review);
+        return SuccessResponse.of(review);
     }
 
     /**
@@ -77,9 +90,15 @@ public class ReviewController {
         return SuccessResponse.empty();
     }
 
-    @PutMapping
-    public SuccessResponse<Void> update(@RequestBody Update update) {
-        reviewService.updateReview(update);
+    @PatchMapping("/{id}")
+    public SuccessResponse<Void> update(
+            Update update,
+            @PathVariable("id") Long reviewId,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "removeImages", required = false) List<String> removeImages,
+            @CurrentUser User user
+    ) {
+        reviewService.updateReview(user.getUserId(), reviewId, update, images, removeImages);
         return SuccessResponse.empty();
     }
 
@@ -87,6 +106,13 @@ public class ReviewController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public SuccessResponse<Void> delete(@PathVariable("id") Long id) {
         reviewService.deleteReview(id);
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/all")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> deleteAll(@RequestBody List<Integer> checkedList) {
+        reviewService.deleteAllReview(checkedList);
         return SuccessResponse.empty();
     }
 

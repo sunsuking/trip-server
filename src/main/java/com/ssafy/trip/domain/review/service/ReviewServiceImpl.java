@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -32,12 +33,28 @@ public class ReviewServiceImpl implements ReviewService {
     private final S3UploadService s3UploadService;
 
     @Override
+    public void deleteAllReview(List<Integer> checkedList) {
+        checkedList.forEach(reviewId -> deleteReview(reviewId));
+    }
+
+    @Override
     public CustomPage<SimpleReview> getReviews(Pageable pageable, Long userId) {
         List<Long> pagingIds = reviewMapper.findPagingIds(pageable);
         List<ReviewWithUser> reviews = reviewMapper.findReviews(pagingIds, userId);
         int count = reviewMapper.countReviews();
         Page<SimpleReview> pageReviews = new PageImpl<>(reviews.stream().map(SimpleReview::of).toList(), pageable, count);
         return CustomPage.of(pageReviews.getContent(), pageReviews.getNumber(), !pageReviews.isLast());
+    }
+
+    @Override
+    public List<SimpleReview> getAllReview() {
+        List<ReviewWithUser> allReview = reviewMapper.getAllReview();
+        return allReview.stream().map(SimpleReview::of).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SimpleReview> searchReview(String keyword) {
+        return reviewMapper.searchReview(keyword);
     }
 
     @Override
@@ -54,6 +71,24 @@ public class ReviewServiceImpl implements ReviewService {
     public List<SimpleReview> getLikedReviews(Long userId) {
         List<ReviewWithUser> LikedAllById = reviewMapper.findLikedAllById(userId);
         return LikedAllById.stream().map(SimpleReview::of).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateReview(Long userId,Long reviewId, Update update, List<MultipartFile> images, List<String> removeImages) {
+        // 사용하지 않는 기존 이미지 제거
+        removeImages.forEach(imgUrl -> {
+            reviewMapper.deleteImg(reviewId,imgUrl);// db
+            s3UploadService.deleteImageFromS3(imgUrl);// s3
+        });
+
+        // 새로 들어온 이미지 추가
+        if(Objects.nonNull(images) && !images.isEmpty()){
+            images.stream().map((image) -> s3UploadService.upload(image).join())
+                    .forEach((imgUrl) -> reviewMapper.saveImg(reviewId, imgUrl));
+        }
+
+        // 정보 업데이트
+        reviewMapper.updateReview(reviewId, update);
     }
 
     @Override
@@ -88,15 +123,11 @@ public class ReviewServiceImpl implements ReviewService {
         reviewMapper.updateLikeCount(reviewId, 1);
     }
 
-    @Override
-    @Transactional
-    public void updateReview(Update update) {
-        reviewMapper.updateReview(update);
-    }
 
     @Override
     @Transactional
     public void deleteReview(long reviewId) {
+        reviewMapper.getImg(reviewId).forEach(img -> s3UploadService.deleteImageFromS3(img));
         reviewMapper.deleteReview(reviewId);
     }
 

@@ -12,6 +12,7 @@ import com.ssafy.trip.domain.user.dto.UserData;
 import com.ssafy.trip.domain.user.dto.UserData.Password;
 import com.ssafy.trip.domain.user.dto.UserData.Profile;
 import com.ssafy.trip.domain.user.dto.UserData.Update;
+import com.ssafy.trip.domain.user.entity.SimpleUser;
 import com.ssafy.trip.domain.user.entity.User;
 import com.ssafy.trip.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -20,7 +21,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,28 +46,29 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public SuccessResponse<Profile> getUser(@PathVariable Long userId) {
-        Profile profile = userService.getProfile(userId);
-        return SuccessResponse.of(profile);
+    public SuccessResponse<UserData.SimpleProfile> findById(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user) {
+        return SuccessResponse.of(userService.findById(userId,user.getUserId()));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<User>> getAllUser() {
+    @GetMapping("")
+    public SuccessResponse<List<User>> getAllUser() {
         List<User> list = userService.findAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return SuccessResponse.of(list);
     }
 
     // 특정 회원 조회
-    @GetMapping("")
-    public ResponseEntity<List<User>> getUserByKeyword(@RequestParam String keyword) {
+    @GetMapping("/search")
+    public SuccessResponse<List<User>> getUserByKeyword(@RequestParam String keyword) {
         List<User> list = userService.findByKeyword(keyword);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return SuccessResponse.of(list);
     }
 
-    @PatchMapping("/update/{userId}")
-    public ResponseEntity<Void> updateIsLocked(@PathVariable Long userId) {
+    @PatchMapping("/{userId}")
+    public SuccessResponse<Void> updateIsLocked(@PathVariable Long userId) {
         userService.updateIsLocked(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     @PatchMapping("/me")
@@ -111,10 +112,10 @@ public class UserController {
         return SuccessResponse.empty();
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> dropUser(@PathVariable Long userId) {
+    @DeleteMapping("/admin/{userId}")
+    public SuccessResponse<Void> dropUser(@PathVariable Long userId) {
         userService.drop(userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SuccessResponse.empty();
     }
 
     @GetMapping("/{userId}/comments")
@@ -131,4 +132,58 @@ public class UserController {
     public SuccessResponse<List<UserData.SimpleReview>> getLikedReviews(@PathVariable("userId") Long userId) {
         return SuccessResponse.of(userService.getLikedReviewsById(userId));
     }
+
+
+    @GetMapping("/{userId}/check")
+    public SuccessResponse<Boolean> isFollow(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.isFollow(followeeId,user.getUserId()));
+    }
+
+    @PostMapping("/{userId}/follow")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SuccessResponse<Void> followUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.followUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    @DeleteMapping("/{userId}/unfollow")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public SuccessResponse<Void> unfollowUser(
+            @PathVariable("userId") Long followeeId,
+            @CurrentUser User user) {
+        userService.unFollowUser(followeeId, user.getUserId());
+        return SuccessResponse.empty();
+    }
+
+    // 해당유저를 팔로우하는 유저리스트
+    @GetMapping("/{userId}/following")
+    public SuccessResponse<List<SimpleUser>> getFollowing(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user
+    ){
+        return SuccessResponse.of(userService.getFollowing(userId,user.getUserId()));
+    }
+
+    // 자신을 팔로우하는 유저리스트
+    @GetMapping("/{userId}/follower")
+    public SuccessResponse<List<SimpleUser>> getFollowers(
+            @PathVariable("userId") Long userId,
+            @CurrentUser User user){
+        return SuccessResponse.of(userService.getFollowers(userId,user.getUserId()));
+    }
+
+    @GetMapping("/{userId}/followerCount")
+    public SuccessResponse<Integer> getFollowerCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowerCount(userId));
+    }
+
+    @GetMapping("/{userId}/followingCount")
+    public SuccessResponse<Integer> getFollowingCount(@PathVariable("userId") Long userId){
+        return SuccessResponse.of(userService.getFollowingCount(userId));
+    }
+
 }

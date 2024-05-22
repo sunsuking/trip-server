@@ -28,4 +28,14 @@ VALUES ('김용수', 'yongsu@kakao.com', 'yongsu', '용용선생김용수', 'htt
     ('김싸피', 'ssafy@ssafy.com', 'ssafy', '싸피오브김싸피', 'https://api.multiavatar.com/user-123123.svg' ,'GOOGLE', 'USER', 1),
     ('나싸피', 'ssafy1@ssafy.com', 'ssafy', '싸피오브나싸피', 'https://api.multiavatar.com/user-1231234.svg' ,'NAVER', 'USER', 1),
     ('박싸피', 'ssafy2@ssafy.com', 'ssafy', '싸피오브박싸피', 'https://api.multiavatar.com/user-123.svg' ,'LOCAL', 'USER', 1),
-    ('이싸피', 'ssafy3@ssafy.com', 'ssafy', '싸피오브이싸피', 'https://api.multiavatar.com/user-234.svg' ,'GITHUB', 'USER', 1);
+    ('이싸피', 'ssafy3@ssafy.com', 'ssafy', '싸피오브이싸피', 'https://api.multiavatar.com/user-234.svg' ,'GITHUB', 'USER', 1),
+    ('김수영', 'sooyoung@kakao.com', 'soo123', '수영김김', 'https://api.multiavatar.com/user-soo.svg', 'KAKAO', 'USER', 1),
+   ('최준영', 'joon@google.com', 'joon123', '준영최최', 'https://api.multiavatar.com/user-joon.svg', 'GOOGLE', 'USER', 1),
+   ('이도현', 'dohy@naver.com', 'dohy123', '도현이이', 'https://api.multiavatar.com/user-dohy.svg', 'NAVER', 'USER', 1),
+   ('박상현', 'sang@ssafy.com', 'sang123', '상현박박', 'https://api.multiavatar.com/user-sang.svg', 'LOCAL', 'USER', 1),
+   ('김예린', 'yerin@kakao.com', 'yerin123', '예린김김', 'https://api.multiavatar.com/user-yerin.svg', 'KAKAO', 'USER', 1),
+   ('정석진', 'seokjin@google.com', 'seokjin123', '석진정정', 'https://api.multiavatar.com/user-seokjin.svg', 'GOOGLE', 'USER', 1),
+   ('홍지수', 'jisu@naver.com', 'jisu123', '지수홍홍', 'https://api.multiavatar.com/user-jisu.svg', 'NAVER', 'USER', 1),
+   ('한서희', 'seohee@ssafy.com', 'seohee123', '서희한한', 'https://api.multiavatar.com/user-seohee.svg', 'LOCAL', 'USER', 1),
+   ('권민수', 'minsu@kakao.com', 'minsu123', '민수권권', 'https://api.multiavatar.com/user-minsu.svg', 'KAKAO', 'USER', 1),
+   ('오준서', 'junseo@google.com', 'junseo123', '준서오오', 'https://api.multiavatar.com/user-junseo.svg', 'GOOGLE', 'USER', 1);
