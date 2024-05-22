@@ -47,6 +47,11 @@ public class ReviewController {
         return SuccessResponse.of(reviewService.getAllReview());
     }
 
+    @GetMapping("/search")
+    public SuccessResponse<List<SimpleReview>> searchReview(@RequestParam String keyword){
+        return SuccessResponse.of(reviewService.searchReview(keyword));
+    }
+
     /**
      * 리뷰 상세 조회
      *

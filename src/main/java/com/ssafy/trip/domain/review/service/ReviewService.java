@@ -41,4 +41,6 @@ public interface ReviewService {
     void updateComment(Long commentId, ReviewData.UpdateComment update);
 
     List<SimpleReview> getAllReview();
+
+    List<SimpleReview> searchReview(String keyword);
 }

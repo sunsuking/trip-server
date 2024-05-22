@@ -52,6 +52,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<SimpleReview> searchReview(String keyword) {
+        return reviewMapper.searchReview(keyword);
+    }
+
+    @Override
     public Optional<ReviewData.Review> findById(Long reviewId, Long userId) {
         return reviewMapper.findById(reviewId, userId).map(ReviewData.Review::of);
     }

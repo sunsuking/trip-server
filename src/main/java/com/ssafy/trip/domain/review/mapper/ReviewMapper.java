@@ -47,4 +47,6 @@ public interface ReviewMapper {
     List<String> getImg(Long reviewId);
 
     void deleteImg(Long reviewId, String imgUrl);
+
+    List<ReviewData.SimpleReview> searchReview(String keyword);
 }
