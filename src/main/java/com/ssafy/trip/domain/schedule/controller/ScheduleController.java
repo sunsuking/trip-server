@@ -46,10 +46,14 @@ public class ScheduleController {
 
     @PostMapping("/{scheduleId}")
     public SuccessResponse<Void> createScheduleTrip(
+            @CurrentUser User user,
             @PathVariable Long scheduleId,
             @RequestBody ScheduleData.CreateScheduleTrip create
     ) {
-        scheduleService.createScheduleTrip(scheduleId, create);
+        if (user == null) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+        scheduleService.createScheduleTrip(scheduleId, create, user);
         return SuccessResponse.empty();
     }
 

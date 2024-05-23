@@ -11,7 +11,7 @@ import java.util.List;
 public interface ScheduleService {
     Long createSchedule(User user, CreateSchedule schedule, MultipartFile image);
 
-    void createScheduleTrip(Long scheduleId, ScheduleData.CreateScheduleTrip create);
+    void createScheduleTrip(Long scheduleId, ScheduleData.CreateScheduleTrip create, User user);
 
     List<ScheduleData.ScheduleSearch> searchAllSchedule(ScheduleData.SearchCondition condition);
 

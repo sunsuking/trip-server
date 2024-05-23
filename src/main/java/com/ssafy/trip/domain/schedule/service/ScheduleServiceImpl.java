@@ -51,11 +51,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public void createScheduleTrip(Long scheduleId, ScheduleData.CreateScheduleTrip create) {
+    public void createScheduleTrip(Long scheduleId, ScheduleData.CreateScheduleTrip create, User user) {
+        if (!scheduleMapper.findById(scheduleId).getUser().getUserId().equals(user.getUserId())) {
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
+
         List<ScheduleTrip> tripEntities = create.toTripEntity(scheduleId);
         List<ScheduleVehicle> vehicleEntities = create.toVehicleEntity(scheduleId);
-        System.out.println(tripEntities);
-        System.out.println(vehicleEntities);
         scheduleMapper.saveBulkScheduleTrip(tripEntities);
         scheduleMapper.saveBulkScheduleVehicle(vehicleEntities);
         scheduleMapper.finishSchedule(scheduleId);
